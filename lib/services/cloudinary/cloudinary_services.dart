@@ -21,6 +21,10 @@ class CloudinaryServices{
       final cloudName = dotenv.env['CLOUDINARY_CLOUD_NAME'];
       final apiKey = dotenv.env['CLOUDINARY_API_KEY'];
       final apiSecret = dotenv.env['CLOUDINARY_API_SECRET'];
+
+      log('CLOUD_NAME: $cloudName');
+    log('API_KEY: $apiKey');
+    log('API_SECRET: $apiSecret');
       
       if (cloudName == null) {
         throw Exception('CLOUDINARY_CLOUD_NAME not found in environment variables');

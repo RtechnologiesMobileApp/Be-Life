@@ -17,7 +17,8 @@ class BottomNav extends StatelessWidget {
       builder: (context,pr,child) {
         return Theme(
           data: ThemeData(useMaterial3: false),
-          child: BottomNavigationBar(
+          child: 
+          BottomNavigationBar(
             onTap: (index)async{
               if(index==2){
               await context.read<PostVideoViewModel>().pickVideo().then((val){
@@ -45,21 +46,65 @@ class BottomNav extends StatelessWidget {
                   pr.selectedIndex == 0 ? Colors.black : Color(0xFFA7A7A7),
                   BlendMode.srcIn,
                 ),)), label: 'Home',),
-                BottomNavigationBarItem(icon: SizedBox(height:24.h,width:24.w,child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    SvgPicture.asset(AppImages.msgIcon,fit: BoxFit.cover,
-                      colorFilter: ColorFilter.mode(
-                      pr.selectedIndex == 1 ? Colors.black : Color(0xFFA7A7A7),
-                      BlendMode.srcIn,
-                    ),),
-                    Positioned(top: -2.h,right: -4.w,
-                        child: Container(height: 12.h,width: 12.h,decoration: BoxDecoration(borderRadius: BorderRadius.circular(100),color: Colors.red),
-                        child: Center(child: Text("2",style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 8),)),
-                        ))
+                BottomNavigationBarItem(
+  icon: SizedBox(
+    height: 24.h,
+    width: 24.w,
+    child: Stack(
+      clipBehavior: Clip.none,
+      children: [
+        SvgPicture.asset(
+          AppImages.msgIcon,
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            pr.selectedIndex == 1 ? Colors.black : const Color(0xFFA7A7A7),
+            BlendMode.srcIn,
+          ),
+        ),
+        if (pr.unreadCount > 0) // ✅ show only when > 0
+          Positioned(
+            top: -2.h,
+            right: -4.w,
+            child: Container(
+              height: 14.h,
+              width: 14.h,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                color: Colors.red,
+              ),
+              child: Center(
+                child: Text(
+                  "${pr.unreadCount}", // ✅ dynamic count
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                        fontSize: 8.sp,
+                        color: Colors.white,
+                      ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    ),
+  ),
+  label: 'Inbox',
+),
 
-                  ],
-                ),), label: 'Inbox'),
+                // BottomNavigationBarItem(icon: SizedBox(height:24.h,width:24.w,child: Stack(
+                //   clipBehavior: Clip.none,
+                //   children: [
+                //     SvgPicture.asset(AppImages.msgIcon,fit: BoxFit.cover,
+                //       colorFilter: ColorFilter.mode(
+                //       pr.selectedIndex == 1 ? Colors.black : Color(0xFFA7A7A7),
+                //       BlendMode.srcIn,
+                //     ),),
+                //     // Positioned(top: -2.h,right: -4.w,
+                //     //   //  child: Container(height: 12.h,width: 12.h,decoration: BoxDecoration(borderRadius: BorderRadius.circular(100),color: Colors.red),
+                //     //    // child: Center(child: Text("2",style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 8),)),
+                //     //     ))
+
+                //   ],
+                // ),),
+                //  label: 'Inbox'),
                 BottomNavigationBarItem(icon: Container(
                     height: 44.h,
                     width: 44.w,

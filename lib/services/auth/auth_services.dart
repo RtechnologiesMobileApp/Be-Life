@@ -43,9 +43,15 @@ class AuthServices{
       }
       
       // Create user with or without profile picture
-      final userToRegister = profilePic != null && imageUrl != null 
-          ? userDetails.copyWith(profilePicture: imageUrl)
-          : userDetails.copyWith(profilePicture: "https://via.placeholder.com/150?text=No+Image");
+      // final userToRegister = profilePic != null && imageUrl != null 
+      //     ? userDetails.copyWith(profilePicture: imageUrl)
+      //     : userDetails.copyWith(profilePicture: "https://via.placeholder.com/150?text=No+Image");
+
+       // ✅ Always provide a valid URL (either uploaded one or placeholder)
+    final userToRegister = userDetails.copyWith(
+      profilePicture: imageUrl ?? "https://via.placeholder.com/150?text=No+Image",
+    );
+
       
       log('Proceeding with user registration...');
       final String authToken = await authRepo.register(userToRegister);

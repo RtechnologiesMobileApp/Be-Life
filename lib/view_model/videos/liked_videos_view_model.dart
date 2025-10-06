@@ -5,9 +5,10 @@ import 'package:be_life_style/services/session_manager/session_controller.dart';
 import 'package:flutter/cupertino.dart';
 
 class LikedVideosViewModel with ChangeNotifier {
-  LikedVideosViewModel({required this.videosRepo}) {
-    getLikedVideos();
-  }
+   LikedVideosViewModel({required this.videosRepo});
+  // {
+  //   getLikedVideos();
+  // }
 
   final VideoRepo videosRepo;
 
@@ -17,7 +18,7 @@ class LikedVideosViewModel with ChangeNotifier {
 
   final List<VideoModel> _likedVideos = [];
   List<VideoModel> get likedVideos=>_likedVideos;
-
+  bool _hasFetched = false; // ✅ new flag
   void setLoading(bool val) {
     _isLoading = val;
     notifyListeners();
@@ -25,7 +26,10 @@ class LikedVideosViewModel with ChangeNotifier {
 
 
   Future<void> getLikedVideos() async {
+        if (_hasFetched) return; 
+    _hasFetched = true;
     setLoading(true);
+
     try {
       final fetchedVideos = await videosRepo.fetchLikedVideos(id: SessionController().id!, token: SessionController().token);
       _likedVideos.clear();
@@ -39,6 +43,8 @@ class LikedVideosViewModel with ChangeNotifier {
   }
 
   Future<void> getUserLikedVideos(int userId) async {
+     if (_hasFetched) return; 
+    _hasFetched = true;
     setLoading(true);
     try {
       final fetchedVideos = await videosRepo.fetchUserLikedVideos(userId: userId, token: SessionController().token);
