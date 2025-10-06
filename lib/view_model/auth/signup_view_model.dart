@@ -137,7 +137,16 @@ void selectInterest(int index){
         .where((interest) => interest.isSelected)
         .map((interest) => interest.title)
         .toList();
-    final userDetails= UserModel( username: usernameController.text, firstName: firstNameController.text, lastName: lastNameController.text, email: emailController.text, dob: dob, phoneNumber: phoneNoController.text, interests: selectedInterestNames, profilePicture: "",password: passController.text);
+    final userDetails= UserModel( 
+      username: usernameController.text,
+       firstName: firstNameController.text,
+        lastName: lastNameController.text,
+         email: emailController.text, 
+         dob: dob,
+          phoneNumber: phoneNoController.text, 
+          interests: selectedInterestNames,
+           profilePicture: "",
+           password: passController.text);
     
     log('Creating account for user: ${userDetails.username}');
     log('User details: ${userDetails.toJson()}');

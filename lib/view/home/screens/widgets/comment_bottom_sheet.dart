@@ -48,7 +48,7 @@ class CommentBottomSheet extends StatelessWidget {
                  Text("No comments yet",style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: AppColors.black),),
                ],): ListView.builder(itemCount: cVM.commentList.length,itemBuilder:(context,index) {
                  final comment=cVM.commentList[index];
-                 return CommentBox(profilePicture: comment.profilePicture,name:  comment.username, isLiked:  comment.isLiked??true, comment: comment.text,likes: comment.likesCount, func: () async{
+                 return CommentBox(profilePicture: comment.profilePicture,name:  comment.username, isLiked:  comment.isLiked??false, comment: comment.text,likes: comment.likesCount, func: () async{
                 await  cVM.toggleComment(comment.id);
                  },);
                }),
