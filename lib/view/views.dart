@@ -1,0 +1,32 @@
+export 'package:be_life_style/view/splash/splash_view.dart';
+export 'welcome/welcome_view.dart';
+export 'login/login_view.dart';
+export 'signup/name_input_view.dart';
+export 'signup/email_input_view.dart';
+export 'signup/dob_input_view.dart';
+export 'signup/code_input_view.dart';
+export 'signup/no_input_view.dart';
+export 'signup/create_password_view.dart';
+export 'signup/interests_picker_view.dart';
+export 'signup/complete_profile_view.dart';
+export 'signup/success_view.dart';
+export 'main_navigation/main_navigation_view.dart';
+export 'inbox/direct_msg_view.dart';
+export 'settings/settings_view.dart';
+export 'inbox/chat_view.dart';
+export 'post/create_post.dart';
+export 'settings/screens/help_center_view.dart';
+export 'settings/screens/edit_profile_view.dart';
+export 'settings/screens/notification_settings_view.dart';
+export 'settings/screens/privacy_security_view.dart';
+export 'search/search_view.dart';
+export 'search/place_info_view.dart';
+export 'bookings/bookings_view.dart';
+export 'bookings/booking_place_details.dart';
+export  'package:be_life_style/view/profile/profile_view.dart';
+export 'package:be_life_style/view/search/tabs/search_tab_view.dart';
+
+// New exports for missing features
+export 'search/user_search_view.dart';
+export 'profile/other_user_profile_view.dart';
+export 'profile/followers_following_view.dart';
