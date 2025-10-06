@@ -1,8 +1,6 @@
 import 'package:be_life_style/config/locator.dart';
 import 'package:be_life_style/config/theme/app_colors.dart';
-import 'package:be_life_style/repo/chat/chat_repo.dart';
 import 'package:be_life_style/res/components/custom_loader.dart';
-import 'package:be_life_style/services/socket/chat_socket_service.dart';
 import 'package:be_life_style/view/inbox/widgets/chat_card.dart';
 import 'package:be_life_style/view/inbox/widgets/search_bar.dart';
 import 'package:be_life_style/view_model/chat/chat_view_model.dart';
@@ -14,8 +12,8 @@ class DirectMsgView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_)=>ChatViewModel(chatSocketService: getIt<ChatSocketService>(), chatRepo: getIt<ChatRepo>()),
+    return ChangeNotifierProvider.value(
+      value: getIt<ChatViewModel>(),
       child: Scaffold(
         appBar: AppBar(centerTitle: true,
         elevation: 0,

@@ -25,23 +25,33 @@ void changeIndex(int index){
   
   _selectedIndex=index;
   _pageController.jumpToPage(index);
-    // 👇 Reset unread count when opening Inbox tab (index = 1)
-    if (index == 1) {
-      resetUnread();
-    }
+  // Note: Removed automatic reset when opening inbox tab
+  // Counter will only reset when DirectMsgWidget is clicked
   notifyListeners();
 }
   // 👇 increment unread message count
   void incrementUnread() {
+    print("🔥 MainNavViewModel: incrementing unread count from $_unreadCount to ${_unreadCount + 1}");
     _unreadCount++;
     notifyListeners();
+    print("🔥 MainNavViewModel: unread count updated to $_unreadCount");
   }
 
   // 👇 reset unread count to 0
   void resetUnread() {
     if (_unreadCount != 0) {
+      print("🔥 MainNavViewModel: resetting unread count from $_unreadCount to 0");
       _unreadCount = 0;
       notifyListeners();
+      print("🔥 MainNavViewModel: unread count reset to $_unreadCount");
     }
+  }
+
+  // 👇 For testing purposes - manually set unread count
+  void setUnreadCount(int count) {
+    print("🔥 MainNavViewModel: manually setting unread count to $count");
+    _unreadCount = count;
+    notifyListeners();
+    print("🔥 MainNavViewModel: unread count set to $_unreadCount");
   }
 }

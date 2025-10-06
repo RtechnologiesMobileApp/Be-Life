@@ -1,3 +1,4 @@
+import 'package:be_life_style/config/locator.dart';
 import 'package:be_life_style/view/bookings/bookings_view.dart';
 import 'package:be_life_style/view/inbox/inbox_view.dart';
 import 'package:be_life_style/view/main_navigation/widgets/bottom_nav.dart';
@@ -14,8 +15,8 @@ class MainNavScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MainNavViewModel(),
+    return ChangeNotifierProvider.value(
+      value: getIt<MainNavViewModel>(),
       child: Scaffold(
         backgroundColor: Colors.white,
         bottomNavigationBar: BottomNav(),

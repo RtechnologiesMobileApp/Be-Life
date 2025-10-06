@@ -1,6 +1,3 @@
-import 'package:be_life_style/config/locator.dart';
-import 'package:be_life_style/model/message_model.dart';
-import 'package:be_life_style/view_model/main_nav_view_model.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'socket_service.dart';
 
@@ -21,15 +18,12 @@ class ChatSocketService {
   }
 
   void onReceiveMessage(Function(dynamic message) callback) {
+    print("🔥 Setting up ChatViewModel message callback");
     _socket.on("receive_message", (data) {
-
-         // 🔥 Increase unread count only if user is not in Inbox tab
-       final mainNav = getIt<MainNavViewModel>();
-      if (mainNav.selectedIndex != 1) {
-        mainNav.incrementUnread();
-      }
+      print("🔥 ChatViewModel message received: $data");
       callback(data);
     });
+    print("🔥 ChatViewModel message callback setup complete");
   }
 
 

@@ -17,8 +17,7 @@ class BottomNav extends StatelessWidget {
       builder: (context,pr,child) {
         return Theme(
           data: ThemeData(useMaterial3: false),
-          child: 
-          BottomNavigationBar(
+          child: BottomNavigationBar(
             onTap: (index)async{
               if(index==2){
               await context.read<PostVideoViewModel>().pickVideo().then((val){
