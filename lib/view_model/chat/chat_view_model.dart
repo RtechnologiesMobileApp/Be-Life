@@ -10,12 +10,17 @@ import '../../services/socket/chat_socket_service.dart';
 class ChatViewModel with ChangeNotifier{
   ChatViewModel({required this.chatSocketService,required this.chatRepo}){
     _fetchChatList();
-    listenReceiveMessage();
+    // Only set up socket listener once
+    if (!_isSocketListenerSetup) {
+      listenReceiveMessage();
+      _isSocketListenerSetup = true;
+    }
   }
   final messageController=TextEditingController();
   final ChatSocketService chatSocketService;
   final ChatRepo chatRepo;
   bool _isLoading=false;
+  bool _isSocketListenerSetup = false;
   bool get isLoading=>_isLoading;
   int _currentPage = 0;
   bool _hasMore = true;

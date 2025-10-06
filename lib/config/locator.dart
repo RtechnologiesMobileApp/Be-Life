@@ -15,6 +15,7 @@ import 'package:be_life_style/services/cloudinary/cloudinary_services.dart';
 import 'package:be_life_style/services/socket/chat_socket_service.dart';
 import 'package:be_life_style/utils/image_picker_utils.dart';
 import 'package:be_life_style/view_model/chat/chat_view_model.dart';
+import 'package:be_life_style/view_model/main_nav_view_model.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
@@ -34,4 +35,5 @@ void setupLocator() {
     chatSocketService: getIt<ChatSocketService>(),
     chatRepo: getIt<ChatRepo>(),
   ));
+  getIt.registerSingleton<MainNavViewModel>(MainNavViewModel());
 }
