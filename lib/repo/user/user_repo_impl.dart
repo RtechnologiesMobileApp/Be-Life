@@ -268,8 +268,8 @@ Future<void> unfollowUser(int userId, String token) async {
       );
       log("✅ getFollowers response: $response");
 
-      if (response != null && response['followers'] != null) {
-        return (response['followers'] as List)
+      if (response != null && response['data'] != null) {
+        return (response['data'] as List)
             .map((user) => OtherUserModel.fromJson(user))
             .toList();
       }
@@ -291,8 +291,8 @@ Future<void> unfollowUser(int userId, String token) async {
       );
       log("✅ getFollowing response: $response");
 
-      if (response != null && response['following'] != null) {
-        return (response['following'] as List)
+      if (response != null && response['data'] != null) {
+        return (response['data'] as List)
             .map((user) => OtherUserModel.fromJson(user))
             .toList();
       }

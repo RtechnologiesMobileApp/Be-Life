@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:be_life_style/model/user_model/other_user_model.dart';
 import 'package:be_life_style/model/video_model/video_model.dart';
 import 'package:be_life_style/repo/video/video_repo.dart';
 import 'package:be_life_style/services/cloudinary/cloudinary_services.dart';
@@ -29,6 +30,10 @@ final captionController=TextEditingController();
 bool _visibility=true;
 bool get visibility =>_visibility;
 
+// Tagged users functionality
+final List<OtherUserModel> _taggedUsers = [];
+List<OtherUserModel> get taggedUsers => _taggedUsers;
+
   void clearData(){
     captionController.clear();
     _pickedVideo=null;
@@ -36,6 +41,7 @@ bool get visibility =>_visibility;
     _thumbnailUrl=null;
     _customThumbnail=null;
     _visibility=true;
+    _taggedUsers.clear();
     notifyListeners();
   }
   void setLoading(bool val){
@@ -45,6 +51,25 @@ bool get visibility =>_visibility;
 
   void toggleVisibility(){
     _visibility=!_visibility;
+    notifyListeners();
+  }
+
+  // Tagged users methods
+  void updateTaggedUsers(List<OtherUserModel> users) {
+    _taggedUsers.clear();
+    _taggedUsers.addAll(users);
+    notifyListeners();
+  }
+
+  void addTaggedUser(OtherUserModel user) {
+    if (!_taggedUsers.any((tagged) => tagged.id == user.id)) {
+      _taggedUsers.add(user);
+      notifyListeners();
+    }
+  }
+
+  void removeTaggedUser(OtherUserModel user) {
+    _taggedUsers.removeWhere((tagged) => tagged.id == user.id);
     notifyListeners();
   }
   Future<void> pickCoverFromGallery()async{

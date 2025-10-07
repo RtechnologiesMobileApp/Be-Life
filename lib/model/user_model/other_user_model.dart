@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'other_user_model.freezed.dart';
-part 'other_user_model.g.dart';
 
 @freezed
 abstract class OtherUserModel with _$OtherUserModel {
@@ -10,9 +9,9 @@ abstract class OtherUserModel with _$OtherUserModel {
     required String username,
     required String firstName,
     required String lastName,
-    required String email,
+    String? email,
     required String profilePicture,
-    required List<String> interests,
+    @Default([]) List<String> interests,
     int? followersCount,
     int? followingCount,
     int? likesCount,
@@ -20,5 +19,20 @@ abstract class OtherUserModel with _$OtherUserModel {
     @Default(false) bool isFollowedBy,
   }) = _OtherUserModel;
 
-  factory OtherUserModel.fromJson(Map<String, dynamic> json) => _$OtherUserModelFromJson(json);
+  factory OtherUserModel.fromJson(Map<String, dynamic> json) {
+    return OtherUserModel(
+      id: json['id'] ?? -1,
+      username: json['username'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      email: json['email'],
+      profilePicture: json['profilePicture'] ?? '',
+      interests: json['interests'] != null ? List<String>.from(json['interests']) : [],
+      followersCount: json['followersCount'],
+      followingCount: json['followingCount'],
+      likesCount: json['likesCount'],
+      isFollowing: json['isFollowing'] == 1 || json['isFollowing'] == true,
+      isFollowedBy: json['isFollowedBy'] == 1 || json['isFollowedBy'] == true,
+    );
+  }
 }

@@ -30,7 +30,7 @@ class SearchView extends StatelessWidget {
               SizedBox(height: 16.h,),
               
               // User Search Button
-              _buildUserSearchButton(context),
+            //  _buildUserSearchButton(context),
               SizedBox(height: 16.h,),
               
               Align(
@@ -74,65 +74,67 @@ class SearchView extends StatelessWidget {
     );
   }
 
-  Widget _buildUserSearchButton(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, RouteName.userSearchScreen);
-      },
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(16.w),
-        decoration: BoxDecoration(
-          color: Colors.blue.shade50,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.blue.shade200),
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(8.w),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              child: Icon(
-                Icons.person_search,
-                color: Colors.white,
-                size: 20.h,
-              ),
-            ),
-            SizedBox(width: 12.w),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Find People',
-                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      color: Colors.blue.shade800,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    'Search for users and connect with them',
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: Colors.blue.shade600,
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.blue.shade600,
-              size: 16.h,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _buildUserSearchButton(BuildContext context) {
+  //   return InkWell(
+  //     onTap: () {
+  //       Navigator.pushNamed(context, RouteName.userSearchScreen);
+  //     },
+  //     child: Container(
+  //       width: double.infinity,
+  //       padding: EdgeInsets.all(16.w),
+  //       decoration: BoxDecoration(
+  //         color: Colors.blue.shade50,
+  //         borderRadius: BorderRadius.circular(12),
+  //         border: Border.all(color: Colors.blue.shade200),
+  //       ),
+  //       child: Row(
+  //         children: [
+  //           Container(
+  //             padding: EdgeInsets.all(8.w),
+  //             decoration: BoxDecoration(
+  //               color: Colors.blue,
+  //               borderRadius: BorderRadius.circular(8.r),
+  //             ),
+  //             child: Icon(
+  //               Icons.person_search,
+  //               color: Colors.white,
+  //               size: 20.h,
+  //             ),
+  //           ),
+  //           SizedBox(width: 12.w),
+  //           Expanded(
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 // Text(
+  //                 //   'Find People',
+  //                 //   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+  //                 //     color: Colors.blue.shade800,
+  //                 //     fontSize: 16.sp,
+  //                 //     fontWeight: FontWeight.w600,
+  //                 //   ),
+  //                 // ),
+  //                 SizedBox(height: 4.h),
+  //                 // Text(
+  //                 //   'Search for users and connect with them',
+  //                 //   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+  //                 //     color: Colors.blue.shade600,
+  //                 //     fontSize: 14.sp,
+  //                 //   ),
+  //                 // ),
+  //               ],
+  //             ),
+  //           ),
+  //           Icon(
+  //             Icons.arrow_forward_ios,
+  //             color: Colors.blue.shade600,
+  //             size: 16.h,
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+
 }

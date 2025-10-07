@@ -104,6 +104,7 @@
 // }
 
 import 'package:be_life_style/view/post/widgets/add_link_bottom_sheet.dart';
+import 'package:be_life_style/view/post/widgets/tag_people_bottom_sheet.dart';
 import 'package:be_life_style/view_model/videos/post_video_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -196,38 +197,97 @@ class BarsWidget extends StatelessWidget {
         ),
 
         // ✅ Tag people
-        CustomBar(
-          leading: SvgPicture.asset(
-            AppImages.addUser,
-            height: 20.h,
-            width: 20.h,
-            fit: BoxFit.cover,
-            color: Colors.black,
-          ),
-          title: "Tag people",
-          trailing: Icon(
-            Icons.arrow_forward_ios,
-            size: 18.h,
-            color: Color(0xFF696969),
-          ),
-          subTitle: Container(
-            margin: EdgeInsets.only(top: 12.h),
-            height: 28.h,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: Color(0xFFF6F6F6),
-            ),
-            // ✅ Empty space for future tagged users
-            child: Center(
-              child: Text(
-                "Tag friends",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge!
-                    .copyWith(fontSize: 14.sp, color: Color(0xFFB0B0B0)),
+        Consumer<PostVideoViewModel>(
+          builder: (context, viewModel, child) {
+            return CustomBar(
+              leading: SvgPicture.asset(
+                AppImages.addUser,
+                height: 20.h,
+                width: 20.h,
+                fit: BoxFit.cover,
+                color: Colors.black,
               ),
-            ),
-          ),
+              title: "Tag people",
+              trailing: InkWell(
+                onTap: () {
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+                    ),
+                    backgroundColor: Colors.white,
+                    context: context,
+                    builder: (context) => TagPeopleBottomSheet(
+                      taggedUsers: viewModel.taggedUsers,
+                      onTaggedUsersChanged: (users) {
+                        viewModel.updateTaggedUsers(users);
+                      },
+                    ),
+                  );
+                },
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  size: 18.h,
+                  color: Color(0xFF696969),
+                ),
+              ),
+              subTitle: viewModel.taggedUsers.isEmpty
+                  ? Container(
+                      margin: EdgeInsets.only(top: 12.h),
+                      height: 28.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Color(0xFFF6F6F6),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Tag friends",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(fontSize: 14.sp, color: Color(0xFFB0B0B0)),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      margin: EdgeInsets.only(top: 12.h),
+                      child: Wrap(
+                        spacing: 8.w,
+                        runSpacing: 4.h,
+                        children: viewModel.taggedUsers.map((user) {
+                          return Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  '${user.firstName} ${user.lastName}',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
+                                SizedBox(width: 4.w),
+                                GestureDetector(
+                                  onTap: () => viewModel.removeTaggedUser(user),
+                                  child: Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                    size: 14.h,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+            );
+          },
         ),
 
         // ✅ Add Links
