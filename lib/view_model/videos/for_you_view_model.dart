@@ -182,6 +182,7 @@ class VideosViewModel with ChangeNotifier {
       controller.initialize().then((_) {
         if (!_isDisposed && hasListeners) {
           debugPrint('Video initialized: ' + video.videoUrl);
+          try { controller.setVolume(1.0); } catch (_) {}
           notifyListeners();
           // Safeguard: ensure first video auto-plays on initial load
           try {
@@ -206,6 +207,7 @@ class VideosViewModel with ChangeNotifier {
         hasListeners &&
         _controllers.length > _currentIndex) {
       try {
+        try { _controllers[_currentIndex].setVolume(1.0); } catch (_) {}
         _controllers[_currentIndex].play();
       } catch (e) {
         log("Error playing controller: $e");
@@ -215,11 +217,27 @@ class VideosViewModel with ChangeNotifier {
 
   void playPause(VideoPlayerController controller) {
     if (!_isDisposed && hasListeners) {
-      controller.value.isPlaying ? controller.pause() : controller.play();
+      if (controller.value.isPlaying) {
+        controller.pause();
+      } else {
+        try { controller.setVolume(1.0); } catch (_) {}
+        controller.play();
+      }
       notifyListeners();
     }
   }
 
+void playCurrentVideo(int index) {
+  for (int i = 0; i < controllers.length; i++) {
+    if (i == index) {
+      controllers[i].play();
+    } else {
+      controllers[i].pause();
+    }
+  }
+}
+
+ 
   void pauseAllVideos() {
     if (!_isDisposed && _controllers.isNotEmpty) {
       for (var controller in _controllers) {
