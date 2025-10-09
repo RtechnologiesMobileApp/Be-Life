@@ -17,7 +17,7 @@ class TopSection extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TopTab(text: "Explore",index:  0),
+                TopTab(text: "Discover",index:  0),
                 TopTab(text: "For you", index: 1),
                 Stack(
                   children: [

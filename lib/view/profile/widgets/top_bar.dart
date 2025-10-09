@@ -1,3 +1,4 @@
+import 'package:be_life_style/config/routes/route_names.dart';
 import 'package:be_life_style/view/profile/widgets/settings_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,11 +16,12 @@ class TopBar extends StatelessWidget {
                 .copyWith(fontSize: 18.sp, color: Colors.black)),
         InkWell(
           onTap: (){
-            showModalBottomSheet(
-              showDragHandle: true,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-                backgroundColor: Colors.white.withValues(alpha: 0.98),
-                context: context, builder: (context)=>SettingsBottomSheet());
+               Navigator.pushNamed(context, RouteName.settingsScreen);
+            // showModalBottomSheet(
+            //   showDragHandle: true,
+            //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+            //     backgroundColor: Colors.white.withValues(alpha: 0.98),
+            //     context: context, builder: (context)=>SettingsBottomSheet());
 
           },
           child: SizedBox(

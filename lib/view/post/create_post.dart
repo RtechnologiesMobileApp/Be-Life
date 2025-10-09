@@ -55,14 +55,15 @@ class CreatePostView extends StatelessWidget {
                   Flexible(child: CoverWidget()),
                   // Image.asset(AppImages.editCover,height: 186.h,width: 127.w,fit: BoxFit.cover,)
                 ],),
-              SizedBox(height: 32.h,),
+              SizedBox(height: 42.h,),
               BarsWidget(),
-
+                SizedBox(width: 50.w,),
+ SizedBox(height: 42.h,),
               SafeArea(
                 child: Row(
                   children: [
-                    Flexible(child: CustomButton(text: "Save draft", onPressed: (){},height: 56.h,width: 162.w,color: Color(0xFFF6F6F6),textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.black),)),
-                    SizedBox(width: 12.w,),
+                 //   Flexible(child: CustomButton(text: "Save draft", onPressed: (){},height: 56.h,width: 162.w,color: Color(0xFFF6F6F6),textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.black),)),
+                    SizedBox(width: 80.w,),
                     Flexible(child: PostVideoBtn()),
                   ],
                 ),

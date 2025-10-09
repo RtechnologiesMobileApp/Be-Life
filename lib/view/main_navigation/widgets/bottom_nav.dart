@@ -88,22 +88,7 @@ class BottomNav extends StatelessWidget {
   label: 'Inbox',
 ),
 
-                // BottomNavigationBarItem(icon: SizedBox(height:24.h,width:24.w,child: Stack(
-                //   clipBehavior: Clip.none,
-                //   children: [
-                //     SvgPicture.asset(AppImages.msgIcon,fit: BoxFit.cover,
-                //       colorFilter: ColorFilter.mode(
-                //       pr.selectedIndex == 1 ? Colors.black : Color(0xFFA7A7A7),
-                //       BlendMode.srcIn,
-                //     ),),
-                //     // Positioned(top: -2.h,right: -4.w,
-                //     //   //  child: Container(height: 12.h,width: 12.h,decoration: BoxDecoration(borderRadius: BorderRadius.circular(100),color: Colors.red),
-                //     //    // child: Center(child: Text("2",style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 8),)),
-                //     //     ))
-
-                //   ],
-                // ),),
-                //  label: 'Inbox'),
+        
                 BottomNavigationBarItem(icon: Container(
                     height: 44.h,
                     width: 44.w,
@@ -112,10 +97,15 @@ class BottomNav extends StatelessWidget {
                       color: Color(0xFF202020),
                       borderRadius: BorderRadius.circular(37),
                     ),child: Icon(Icons.add,color: Colors.white,)),label: ""),
-                BottomNavigationBarItem(icon: SizedBox(height:24.h,width:24.w,child: SvgPicture.asset(AppImages.calendarIcon,fit: BoxFit.cover,colorFilter: ColorFilter.mode(
-                  pr.selectedIndex == 3 ? Colors.black : Color(0xFFA7A7A7),
-                  BlendMode.srcIn,
-                ),)), label: 'Bookings'),
+              BottomNavigationBarItem(
+  icon: Icon(
+    Icons.explore_outlined,
+    size: 24.h,
+    color: pr.selectedIndex == 3 ? Colors.black : const Color(0xFFA7A7A7),
+  ),
+  label: 'Discover',
+),
+
                 BottomNavigationBarItem(icon: SizedBox(height:24.h,width:24.w,child: SvgPicture.asset(AppImages.userDarkIcon,fit: BoxFit.cover,colorFilter: ColorFilter.mode(
                   pr.selectedIndex == 4 ? Colors.black : Color(0xFFA7A7A7),
                   BlendMode.srcIn,

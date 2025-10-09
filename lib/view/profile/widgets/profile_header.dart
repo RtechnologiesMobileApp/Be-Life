@@ -20,7 +20,7 @@ class ProfileHeader extends StatelessWidget {
         return pVM.isLoading?ProfileHeaderShimmer():Column(children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: 34.h, width: 34.w),
               SizedBox(
@@ -61,11 +61,11 @@ class ProfileHeader extends StatelessWidget {
                           child: SvgPicture.asset(AppImages.camIcon)),
                     ],
                   )),
-              Container(
-                  height: 34.h,
-                  width: 34.w,
-                  padding: EdgeInsets.only(right: 19.w),
-                  child: Icon(CupertinoIcons.gift)),
+              // Container(
+              //     height: 34.h,
+              //     width: 34.w,
+              //     padding: EdgeInsets.only(right: 19.w),
+              //     child: Icon(CupertinoIcons.gift)),
             ],
           ),
           SizedBox(height: 24.h),

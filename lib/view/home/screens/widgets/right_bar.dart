@@ -12,9 +12,12 @@ import 'package:be_life_style/view_model/videos/my_videos_view_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
+ 
 
 class RightBar extends StatefulWidget {
   final VideoModel videoData;
@@ -128,22 +131,56 @@ class _RightBarState extends State<RightBar> {
           SizedBox(height: 22.h),
 
           // 🔗 Share
-          InkWell(
-            onTap: () {
-              showModalBottomSheet(
-                isScrollControlled: true,
-                shape: const RoundedRectangleBorder(),
-                backgroundColor: Colors.white.withValues(alpha: 0.98),
-                context: context,
-                builder: (_) => const ShareBottomSheet(),
-              );
-            },
-            child: SizedBox(
-              height: 32.h,
-              width: 32.h,
-              child: SvgPicture.asset(AppImages.shareIcon),
-            ),
-          ),
+          // 🔗 Share
+// 🔗 Share
+InkWell(
+  onTap: () async {
+    final videoUrl =
+        "${dotenv.env['BASE_URL']}/videos/${video.id}"; // or use video.videoUrl if it exists
+
+    try {
+      await Share.share(
+        "🎬 Check out this awesome video on Be Life Style!\n\n$videoUrl",
+        subject: "Watch this video",
+      );
+
+      
+    } catch (e) {
+      debugPrint("❌ Failed to share video: $e");
+    }
+  },
+  child: Column(
+    children: [
+      SizedBox(
+        height: 32.h,
+        width: 32.h,
+        child: SvgPicture.asset(AppImages.shareIcon),
+      ),
+      SizedBox(height: 3.h),
+      Text(video.shareCount.toString(),
+          style: Theme.of(context).textTheme.bodyMedium),
+    ],
+  ),
+),
+
+          // InkWell(
+          //   onTap: () {
+          //     showModalBottomSheet(
+          //       isScrollControlled: true,
+          //       shape: const RoundedRectangleBorder(),
+          //       backgroundColor: Colors.white.withValues(alpha: 0.98),
+          //       context: context,
+          //       builder: (_) => const ShareBottomSheet(),
+          //     );
+          //   },
+          //   child: SizedBox(
+          //     height: 32.h,
+          //     width: 32.h,
+          //     child: SvgPicture.asset(AppImages.shareIcon),
+          //   ),
+          // ),
+         
+         
           SizedBox(height: 3.h),
           Text(video.shareCount.toString(),
               style: Theme.of(context).textTheme.bodyMedium),

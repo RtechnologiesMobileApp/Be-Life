@@ -1,5 +1,6 @@
 import 'package:be_life_style/config/locator.dart';
 import 'package:be_life_style/view/bookings/bookings_view.dart';
+import 'package:be_life_style/view/home/screens/explore_screen.dart';
 import 'package:be_life_style/view/inbox/inbox_view.dart';
 import 'package:be_life_style/view/main_navigation/widgets/bottom_nav.dart';
 import 'package:be_life_style/view/post/create_post.dart';
@@ -29,7 +30,8 @@ class MainNavScreen extends StatelessWidget {
                 HomeView(),
                 InboxView(),
                 CreatePostView() ,// Middle button
-                BookingsView(),
+                 ExploreScreen(),
+                // BookingsView(),
                 ProfileView(),
               ],
             );
