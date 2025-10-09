@@ -1,4 +1,3 @@
- 
 import 'dart:developer';
 import 'package:be_life_style/config/api_endpoints.dart';
 import 'package:be_life_style/data/network/base_api_services.dart';
@@ -44,7 +43,12 @@ class UserRepoImpl implements UserRepo {
         safeLogData['password'] = '*** (len=' + pwd.length.toString() + ')';
       }
       log('[UserRepoImpl.updateProfile] URL: ' + ApiEndpoints.updateProfile);
-      log('[UserRepoImpl.updateProfile] token prefix: ' + (token.isNotEmpty ? token.substring(0, token.length.clamp(0, 12)) + '...' : '(empty)'));
+      log(
+        '[UserRepoImpl.updateProfile] token prefix: ' +
+            (token.isNotEmpty
+                ? token.substring(0, token.length.clamp(0, 12)) + '...'
+                : '(empty)'),
+      );
       log('[UserRepoImpl.updateProfile] payload: ' + safeLogData.toString());
       await apiService.putApi(
         url: ApiEndpoints.updateProfile,
@@ -69,9 +73,10 @@ class UserRepoImpl implements UserRepo {
       log("✅ searchUsers response: $response");
 
       if (response != null && response['data'] != null) {
-        final users = (response['data'] as List)
-            .map((user) => UserSearchModel.fromJson(user))
-            .toList();
+        final users =
+            (response['data'] as List)
+                .map((user) => UserSearchModel.fromJson(user))
+                .toList();
         log("🔎 Found ${users.length} users");
         return users;
       }
@@ -100,48 +105,44 @@ class UserRepoImpl implements UserRepo {
   }
 
   @override
-Future<void> followUser(int userId, String token) async {
-  try {
-    log("➡️ Calling FOLLOW API for userId: $userId");
-    log("🔑 Token: ${token.substring(0, 15)}...");
-    
-    final response = await apiService.postApi(
-      url: ApiEndpoints.followUser, 
-      token: token,
-       data: {   
-        "followingId": userId,
-      },
-    );
-    
-    log("✅ followUser success, response: $response");
-  } catch (e) {
-    log("❌ Error in followUser: $e");
-    rethrow;
-  }
-}
+  Future<void> followUser(int userId, String token) async {
+    try {
+      log("➡️ Calling FOLLOW API for userId: $userId");
+      log("🔑 Token: ${token.substring(0, 15)}...");
 
+      final response = await apiService.postApi(
+        url: ApiEndpoints.followUser,
+        token: token,
+        data: {"followingId": userId},
+      );
+
+      log("✅ followUser success, response: $response");
+    } catch (e) {
+      log("❌ Error in followUser: $e");
+      rethrow;
+    }
+  }
 
   @override
-Future<void> unfollowUser(int userId, String token) async {
-  try {
-    log("➡️ Calling UNFOLLOW API for userId: $userId");
-    log("🔑 Token: ${token.substring(0, 15)}...");
+  Future<void> unfollowUser(int userId, String token) async {
+    try {
+      log("➡️ Calling UNFOLLOW API for userId: $userId");
+      log("🔑 Token: ${token.substring(0, 15)}...");
 
-    final response = await apiService.postApi(
-      url: ApiEndpoints.unfollowUser, // sirf /unfollow
-      token: token,
-      data: {
-        "followingId": userId, // ✅ body me
-      },
-    );
+      final response = await apiService.postApi(
+        url: ApiEndpoints.unfollowUser, // sirf /unfollow
+        token: token,
+        data: {
+          "followingId": userId, // ✅ body me
+        },
+      );
 
-    log("✅ unfollowUser success, response: $response");
-  } catch (e) {
-    log("❌ Error in unfollowUser: $e");
-    rethrow;
+      log("✅ unfollowUser success, response: $response");
+    } catch (e) {
+      log("❌ Error in unfollowUser: $e");
+      rethrow;
+    }
   }
-}
-
 
   @override
   Future<List<OtherUserModel>> getFollowers(int userId, String token) async {

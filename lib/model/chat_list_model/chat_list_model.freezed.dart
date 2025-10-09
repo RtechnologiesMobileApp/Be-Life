@@ -16,7 +16,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ChatListModel {
 
- int get chatWith; String get chatWithUsername; String get profilePicture; String get lastMessageTime; String get lastMessage; int get unreadCount;
+@JsonKey(name: 'userId') int get chatWith;@JsonKey(name: 'username') String get chatWithUsername;@JsonKey(name: 'profilePicture') String get profilePicture;@JsonKey(name: 'lastMessageTime') String get lastMessageTime;@JsonKey(name: 'lastMessage') String get lastMessage;@JsonKey(name: 'unreadCount', fromJson: _toInt) int get unreadCount;/// Nullable so we can fill it later after fetching chat messages
+ List<MessageModel>? get messages;
 /// Create a copy of ChatListModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +30,16 @@ $ChatListModelCopyWith<ChatListModel> get copyWith => _$ChatListModelCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatListModel&&(identical(other.chatWith, chatWith) || other.chatWith == chatWith)&&(identical(other.chatWithUsername, chatWithUsername) || other.chatWithUsername == chatWithUsername)&&(identical(other.profilePicture, profilePicture) || other.profilePicture == profilePicture)&&(identical(other.lastMessageTime, lastMessageTime) || other.lastMessageTime == lastMessageTime)&&(identical(other.lastMessage, lastMessage) || other.lastMessage == lastMessage)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatListModel&&(identical(other.chatWith, chatWith) || other.chatWith == chatWith)&&(identical(other.chatWithUsername, chatWithUsername) || other.chatWithUsername == chatWithUsername)&&(identical(other.profilePicture, profilePicture) || other.profilePicture == profilePicture)&&(identical(other.lastMessageTime, lastMessageTime) || other.lastMessageTime == lastMessageTime)&&(identical(other.lastMessage, lastMessage) || other.lastMessage == lastMessage)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount)&&const DeepCollectionEquality().equals(other.messages, messages));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,chatWith,chatWithUsername,profilePicture,lastMessageTime,lastMessage,unreadCount);
+int get hashCode => Object.hash(runtimeType,chatWith,chatWithUsername,profilePicture,lastMessageTime,lastMessage,unreadCount,const DeepCollectionEquality().hash(messages));
 
 @override
 String toString() {
-  return 'ChatListModel(chatWith: $chatWith, chatWithUsername: $chatWithUsername, profilePicture: $profilePicture, lastMessageTime: $lastMessageTime, lastMessage: $lastMessage, unreadCount: $unreadCount)';
+  return 'ChatListModel(chatWith: $chatWith, chatWithUsername: $chatWithUsername, profilePicture: $profilePicture, lastMessageTime: $lastMessageTime, lastMessage: $lastMessage, unreadCount: $unreadCount, messages: $messages)';
 }
 
 
@@ -49,7 +50,7 @@ abstract mixin class $ChatListModelCopyWith<$Res>  {
   factory $ChatListModelCopyWith(ChatListModel value, $Res Function(ChatListModel) _then) = _$ChatListModelCopyWithImpl;
 @useResult
 $Res call({
- int chatWith, String chatWithUsername, String profilePicture, String lastMessageTime, String lastMessage, int unreadCount
+@JsonKey(name: 'userId') int chatWith,@JsonKey(name: 'username') String chatWithUsername,@JsonKey(name: 'profilePicture') String profilePicture,@JsonKey(name: 'lastMessageTime') String lastMessageTime,@JsonKey(name: 'lastMessage') String lastMessage,@JsonKey(name: 'unreadCount', fromJson: _toInt) int unreadCount, List<MessageModel>? messages
 });
 
 
@@ -66,7 +67,7 @@ class _$ChatListModelCopyWithImpl<$Res>
 
 /// Create a copy of ChatListModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? chatWith = null,Object? chatWithUsername = null,Object? profilePicture = null,Object? lastMessageTime = null,Object? lastMessage = null,Object? unreadCount = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? chatWith = null,Object? chatWithUsername = null,Object? profilePicture = null,Object? lastMessageTime = null,Object? lastMessage = null,Object? unreadCount = null,Object? messages = freezed,}) {
   return _then(_self.copyWith(
 chatWith: null == chatWith ? _self.chatWith : chatWith // ignore: cast_nullable_to_non_nullable
 as int,chatWithUsername: null == chatWithUsername ? _self.chatWithUsername : chatWithUsername // ignore: cast_nullable_to_non_nullable
@@ -74,7 +75,8 @@ as String,profilePicture: null == profilePicture ? _self.profilePicture : profil
 as String,lastMessageTime: null == lastMessageTime ? _self.lastMessageTime : lastMessageTime // ignore: cast_nullable_to_non_nullable
 as String,lastMessage: null == lastMessage ? _self.lastMessage : lastMessage // ignore: cast_nullable_to_non_nullable
 as String,unreadCount: null == unreadCount ? _self.unreadCount : unreadCount // ignore: cast_nullable_to_non_nullable
-as int,
+as int,messages: freezed == messages ? _self.messages : messages // ignore: cast_nullable_to_non_nullable
+as List<MessageModel>?,
   ));
 }
 
@@ -85,15 +87,26 @@ as int,
 @JsonSerializable()
 
 class _ChatListModel implements ChatListModel {
-  const _ChatListModel({required this.chatWith, required this.chatWithUsername, required this.profilePicture, required this.lastMessageTime, required this.lastMessage, required this.unreadCount});
+  const _ChatListModel({@JsonKey(name: 'userId') required this.chatWith, @JsonKey(name: 'username') required this.chatWithUsername, @JsonKey(name: 'profilePicture') required this.profilePicture, @JsonKey(name: 'lastMessageTime') required this.lastMessageTime, @JsonKey(name: 'lastMessage') required this.lastMessage, @JsonKey(name: 'unreadCount', fromJson: _toInt) required this.unreadCount, final  List<MessageModel>? messages}): _messages = messages;
   factory _ChatListModel.fromJson(Map<String, dynamic> json) => _$ChatListModelFromJson(json);
 
-@override final  int chatWith;
-@override final  String chatWithUsername;
-@override final  String profilePicture;
-@override final  String lastMessageTime;
-@override final  String lastMessage;
-@override final  int unreadCount;
+@override@JsonKey(name: 'userId') final  int chatWith;
+@override@JsonKey(name: 'username') final  String chatWithUsername;
+@override@JsonKey(name: 'profilePicture') final  String profilePicture;
+@override@JsonKey(name: 'lastMessageTime') final  String lastMessageTime;
+@override@JsonKey(name: 'lastMessage') final  String lastMessage;
+@override@JsonKey(name: 'unreadCount', fromJson: _toInt) final  int unreadCount;
+/// Nullable so we can fill it later after fetching chat messages
+ final  List<MessageModel>? _messages;
+/// Nullable so we can fill it later after fetching chat messages
+@override List<MessageModel>? get messages {
+  final value = _messages;
+  if (value == null) return null;
+  if (_messages is EqualUnmodifiableListView) return _messages;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
 
 /// Create a copy of ChatListModel
 /// with the given fields replaced by the non-null parameter values.
@@ -108,16 +121,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatListModel&&(identical(other.chatWith, chatWith) || other.chatWith == chatWith)&&(identical(other.chatWithUsername, chatWithUsername) || other.chatWithUsername == chatWithUsername)&&(identical(other.profilePicture, profilePicture) || other.profilePicture == profilePicture)&&(identical(other.lastMessageTime, lastMessageTime) || other.lastMessageTime == lastMessageTime)&&(identical(other.lastMessage, lastMessage) || other.lastMessage == lastMessage)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatListModel&&(identical(other.chatWith, chatWith) || other.chatWith == chatWith)&&(identical(other.chatWithUsername, chatWithUsername) || other.chatWithUsername == chatWithUsername)&&(identical(other.profilePicture, profilePicture) || other.profilePicture == profilePicture)&&(identical(other.lastMessageTime, lastMessageTime) || other.lastMessageTime == lastMessageTime)&&(identical(other.lastMessage, lastMessage) || other.lastMessage == lastMessage)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount)&&const DeepCollectionEquality().equals(other._messages, _messages));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,chatWith,chatWithUsername,profilePicture,lastMessageTime,lastMessage,unreadCount);
+int get hashCode => Object.hash(runtimeType,chatWith,chatWithUsername,profilePicture,lastMessageTime,lastMessage,unreadCount,const DeepCollectionEquality().hash(_messages));
 
 @override
 String toString() {
-  return 'ChatListModel(chatWith: $chatWith, chatWithUsername: $chatWithUsername, profilePicture: $profilePicture, lastMessageTime: $lastMessageTime, lastMessage: $lastMessage, unreadCount: $unreadCount)';
+  return 'ChatListModel(chatWith: $chatWith, chatWithUsername: $chatWithUsername, profilePicture: $profilePicture, lastMessageTime: $lastMessageTime, lastMessage: $lastMessage, unreadCount: $unreadCount, messages: $messages)';
 }
 
 
@@ -128,7 +141,7 @@ abstract mixin class _$ChatListModelCopyWith<$Res> implements $ChatListModelCopy
   factory _$ChatListModelCopyWith(_ChatListModel value, $Res Function(_ChatListModel) _then) = __$ChatListModelCopyWithImpl;
 @override @useResult
 $Res call({
- int chatWith, String chatWithUsername, String profilePicture, String lastMessageTime, String lastMessage, int unreadCount
+@JsonKey(name: 'userId') int chatWith,@JsonKey(name: 'username') String chatWithUsername,@JsonKey(name: 'profilePicture') String profilePicture,@JsonKey(name: 'lastMessageTime') String lastMessageTime,@JsonKey(name: 'lastMessage') String lastMessage,@JsonKey(name: 'unreadCount', fromJson: _toInt) int unreadCount, List<MessageModel>? messages
 });
 
 
@@ -145,7 +158,7 @@ class __$ChatListModelCopyWithImpl<$Res>
 
 /// Create a copy of ChatListModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? chatWith = null,Object? chatWithUsername = null,Object? profilePicture = null,Object? lastMessageTime = null,Object? lastMessage = null,Object? unreadCount = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? chatWith = null,Object? chatWithUsername = null,Object? profilePicture = null,Object? lastMessageTime = null,Object? lastMessage = null,Object? unreadCount = null,Object? messages = freezed,}) {
   return _then(_ChatListModel(
 chatWith: null == chatWith ? _self.chatWith : chatWith // ignore: cast_nullable_to_non_nullable
 as int,chatWithUsername: null == chatWithUsername ? _self.chatWithUsername : chatWithUsername // ignore: cast_nullable_to_non_nullable
@@ -153,7 +166,8 @@ as String,profilePicture: null == profilePicture ? _self.profilePicture : profil
 as String,lastMessageTime: null == lastMessageTime ? _self.lastMessageTime : lastMessageTime // ignore: cast_nullable_to_non_nullable
 as String,lastMessage: null == lastMessage ? _self.lastMessage : lastMessage // ignore: cast_nullable_to_non_nullable
 as String,unreadCount: null == unreadCount ? _self.unreadCount : unreadCount // ignore: cast_nullable_to_non_nullable
-as int,
+as int,messages: freezed == messages ? _self._messages : messages // ignore: cast_nullable_to_non_nullable
+as List<MessageModel>?,
   ));
 }
 

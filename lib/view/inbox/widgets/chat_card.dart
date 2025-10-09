@@ -18,6 +18,7 @@ class ChatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: ()async{
+      print("🔵 CHAT_DEBUG [UI]: ChatCard tapped for chatId: $id, name: $name");
       Navigator.pushNamed(context, RouteName.chatScreen,
           arguments:{
         'otherUserId':id,
@@ -25,7 +26,9 @@ class ChatCard extends StatelessWidget {
             'img':img,
             "viewModel":context.read<ChatViewModel>(),
           } );
+      print("🔵 CHAT_DEBUG [UI]: About to call fetchMessages for chatId: $id");
       await  context.read<ChatViewModel>().fetchMessages(id);
+      print("🔵 CHAT_DEBUG [UI]: fetchMessages completed for chatId: $id");
       },
       minTileHeight: 0,
       minVerticalPadding: 0,

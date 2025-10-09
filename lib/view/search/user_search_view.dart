@@ -1,7 +1,9 @@
 import 'package:be_life_style/config/locator.dart';
 import 'package:be_life_style/config/routes/route_names.dart';
+import 'package:be_life_style/config/theme/app_colors.dart';
 import 'package:be_life_style/model/user_model/user_search_model.dart';
 import 'package:be_life_style/repo/user/user_repo.dart';
+import 'package:be_life_style/view_model/chat/chat_view_model.dart';
 import 'package:be_life_style/view_model/user/user_search_view_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -45,29 +47,30 @@ class UserSearchView extends StatelessWidget {
                     if (viewModel.isLoading) {
                       return Center(child: CircularProgressIndicator());
                     }
-                    
-                    if (viewModel.searchResults.isEmpty && viewModel.searchQuery.isNotEmpty) {
+
+                    if (viewModel.searchResults.isEmpty &&
+                        viewModel.searchQuery.isNotEmpty) {
                       return Center(
                         child: Text(
                           'No users found',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Colors.grey,
-                          ),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium!.copyWith(color: Colors.grey),
                         ),
                       );
                     }
-                    
+
                     if (viewModel.searchQuery.isEmpty) {
                       return Center(
                         child: Text(
                           'Search for users to connect with',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Colors.grey,
-                          ),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium!.copyWith(color: Colors.grey),
                         ),
                       );
                     }
-                    
+
                     return ListView.builder(
                       itemCount: viewModel.searchResults.length,
                       itemBuilder: (context, index) {
@@ -147,18 +150,20 @@ class UserSearchView extends StatelessWidget {
               height: 50.h,
               width: 50.w,
               fit: BoxFit.cover,
-              placeholder: (context, url) => Container(
-                height: 50.h,
-                width: 50.w,
-                color: Colors.grey.shade300,
-                child: Icon(Icons.person, color: Colors.grey.shade600),
-              ),
-              errorWidget: (context, url, error) => Container(
-                height: 50.h,
-                width: 50.w,
-                color: Colors.grey.shade300,
-                child: Icon(Icons.error, color: Colors.grey.shade600),
-              ),
+              placeholder:
+                  (context, url) => Container(
+                    height: 50.h,
+                    width: 50.w,
+                    color: Colors.grey.shade300,
+                    child: Icon(Icons.person, color: Colors.grey.shade600),
+                  ),
+              errorWidget:
+                  (context, url, error) => Container(
+                    height: 50.h,
+                    width: 50.w,
+                    color: Colors.grey.shade300,
+                    child: Icon(Icons.error, color: Colors.grey.shade600),
+                  ),
             ),
           ),
           SizedBox(width: 16.w),
@@ -190,7 +195,10 @@ class UserSearchView extends StatelessWidget {
             children: [
               if (user.isFollowing)
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 8.h,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade200,
                     borderRadius: BorderRadius.circular(20.r),
@@ -215,9 +223,12 @@ class UserSearchView extends StatelessWidget {
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 8.h,
+                    ),
                     decoration: BoxDecoration(
-                      color: Colors.blue,
+                      color: AppColors.lightBlue,
                       borderRadius: BorderRadius.circular(20.r),
                     ),
                     child: Text(
@@ -231,33 +242,37 @@ class UserSearchView extends StatelessWidget {
                   ),
                 ),
               SizedBox(width: 8.w),
-              InkWell(
-                onTap: () {
-                  // Navigate to chat screen
-                  Navigator.pushNamed(
-                    context,
-                    RouteName.chatScreen,
-                    arguments: {
-                      'otherUserId': user.id,
-                      'name': '${user.firstName} ${user.lastName}',
-                      'img': user.profilePicture,
-                      'viewModel': null, // Will be created in chat screen
-                    },
-                  );
-                },
-                child: Container(
-                  padding: EdgeInsets.all(8.w),
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(20.r),
-                  ),
-                  child: Icon(
-                    Icons.message,
-                    color: Colors.white,
-                    size: 16.h,
-                  ),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () async {
+              //     final chatVM = getIt<ChatViewModel>();
+              //     // Navigate to chat screen
+
+              //     Navigator.pushNamed(
+              //       context,
+              //       RouteName.chatScreen,
+              //       arguments: {
+              //         'otherUserId': user.id,
+              //         'name': '${user.firstName} ${user.lastName}',
+              //         'img': user.profilePicture,
+              //         'viewModel': chatVM,
+              //       },
+              //     );
+
+              //     await chatVM.fetchMessages(user.id);
+              //   },
+              //   child: Container(
+              //     padding: EdgeInsets.all(8.w),
+              //     decoration: BoxDecoration(
+              //       color: Colors.green,
+              //       borderRadius: BorderRadius.circular(20.r),
+              //     ),
+              //     child: Icon(
+              //       Icons.message,
+              //       color: AppColors.black,
+              //       size: 16.h,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ],

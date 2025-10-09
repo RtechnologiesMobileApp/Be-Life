@@ -7,53 +7,106 @@ import 'package:be_life_style/view_model/chat/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+
 class DirectMsgView extends StatelessWidget {
   const DirectMsgView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final chatVM = getIt<ChatViewModel>();
+
     return ChangeNotifierProvider.value(
-      value: getIt<ChatViewModel>(),
-      child: Scaffold(
-        appBar: AppBar(centerTitle: true,
+      value: chatVM,
+      child: const _DirectMsgContent(),
+    );
+  }
+}
+
+class _DirectMsgContent extends StatelessWidget {
+  const _DirectMsgContent();
+
+  @override
+  Widget build(BuildContext context) {
+    final cVM = context.watch<ChatViewModel>();
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        centerTitle: true,
         elevation: 0,
-          backgroundColor: Colors.white,
-          leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios,color: Colors.black,)),
-          title: Text("Direct message",style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w700,color: Colors.black),),
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
         ),
-        body: Container(
-          color: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 16.w,),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CustomSearchBar(),
-              SizedBox(height:17.h ,),
-              Consumer<ChatViewModel>(
-                  builder: (context,cVM,_) {
-                    return Expanded(
-                      child:cVM.chatList.isEmpty?Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          cVM.isLoading?CustomLoader():Text("You don't have any messages",style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: AppColors.black),),
-                        ],
-                      ): ListView.builder(
-                        padding: EdgeInsets.zero,
-                          itemCount: cVM.searchedChatList.isEmpty?cVM.chatList.length:cVM.searchedChatList.length,
-                          itemBuilder: (context,index){
-                            final chatItem=cVM.searchedChatList.isEmpty?cVM.chatList[index]:cVM.searchedChatList[index];
-                            return Padding(
-                              padding:  EdgeInsets.only(bottom: 20.h),
-                              child: ChatCard(img: chatItem.profilePicture, name: chatItem.chatWithUsername, time: cVM.convertTime(chatItem.lastMessageTime,), subTitle: chatItem.lastMessage, unreadCount: chatItem.unreadCount, id: chatItem.chatWith,),
-                            );
-                          }),
-                    );
-                  }
-              ),
-              // SizedBox(height:20.h ,),
-            ],),
+        title: Text(
+          "Direct message",
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+            fontWeight: FontWeight.w700,
+            color: Colors.black,
+          ),
         ),
       ),
+      body: RefreshIndicator(
+        backgroundColor: AppColors.lightBlue,
+        color: AppColors.black,
+        onRefresh: () async => await cVM.fetchChatList(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: CustomSearchBar(),
+            ),
+            SizedBox(height: 17.h),
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child:
+                    cVM.isLoading
+                        ? const Center(child: CustomLoader())
+                        : _buildChatList(context, cVM),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildChatList(BuildContext context, ChatViewModel cVM) {
+    final displayList =
+        cVM.searchedChatList.isNotEmpty ? cVM.searchedChatList : cVM.chatList;
+
+    if (displayList.isEmpty) {
+      return Center(
+        child: Text(
+          "You don't have any messages",
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium!.copyWith(color: AppColors.black),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      physics: const AlwaysScrollableScrollPhysics(),
+      itemCount: displayList.length,
+      itemBuilder: (context, index) {
+        final chatItem = displayList[index];
+        return Padding(
+          padding: EdgeInsets.only(bottom: 20.h),
+          child: ChatCard(
+            img: chatItem.profilePicture,
+            name: chatItem.chatWithUsername,
+            time: cVM.convertTime(chatItem.lastMessageTime),
+            subTitle: chatItem.lastMessage,
+            unreadCount: chatItem.unreadCount,
+            id: chatItem.chatWith,
+          ),
+        );
+      },
     );
   }
 }
