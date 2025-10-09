@@ -47,8 +47,9 @@ class _EditProfileViewState extends State<EditProfileView> {
         _emailController.text = user.email;
       }
       if (_bioController.text.isEmpty) {
-        _bioController.text = SessionController().bio ?? '';
-      }
+  _bioController.text = user.bio ?? '';
+}
+
       _didPrefill = true;
     }
   }

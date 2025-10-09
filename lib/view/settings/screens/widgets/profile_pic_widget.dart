@@ -31,8 +31,37 @@ final String imageUrl;
                   errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
               ),
-            ),    Positioned( right: 0,bottom: 0,
-                child: SvgPicture.asset(AppImages.imagePickIcon,height: 40,width: 40,fit: BoxFit.cover,)),
+            ),
+            Positioned(
+  right: 0,
+  bottom: 0,
+  child: Container(
+    height: 30,
+    width: 30,
+    decoration: const BoxDecoration(
+      shape: BoxShape.circle,
+      color: Colors.black, // optional background for visibility
+    ),
+    child: const Center(
+      child: Icon(
+        Icons.camera_alt,
+        size: 22,
+        color: Colors.white,
+      ),
+    ),
+  ),
+),
+
+            // Positioned(
+            //   right: 0,
+            //   bottom: 0,
+            //   child: SvgPicture.asset(
+            //     AppImages.imagePickIcon,
+            //     height: 40,
+            //     width: 40,
+            //     fit: BoxFit.cover,
+            //   ),
+            // ),
           ],
         ),
       );

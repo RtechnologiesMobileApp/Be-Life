@@ -41,25 +41,64 @@ class ProfileViewModel with ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void> fetchUserDetails(BuildContext context)async{
-   setLoading(true);
-    try{
-     await SessionController().getUserInPreference();
-     _userDetails=  await userRepo.getUserDetails(SessionController().token);
-     SocketService().initSocket(_userDetails!.id);
-     await SessionController().saveUserIdInPreference(_userDetails!.id);
+Future<void> fetchUserDetails(BuildContext context) async {
+  setLoading(true);
+  try {
+    // 1️⃣ Get token from SessionController (not user data)
+    final token = SessionController().token;
 
-     notifyListeners();
-    }catch(e){
-      if(context.mounted) {
-        Navigator.pushNamedAndRemoveUntil(
-            context, RouteName.loginScreen, (route) => false);
-      }
-      log(e.toString());
-    }finally{
-      setLoading(false);
+    // 2️⃣ Fetch latest user from backend
+    final fetchedUser = await userRepo.getUserDetails(token);
+
+    // 3️⃣ Log fetched bio to confirm
+    log("✅ BIO fetched from BE: ${fetchedUser.bio}");
+
+    // 4️⃣ Update local variable and preferences
+    _userDetails = fetchedUser;
+    await SessionController().saveUserIdInPreference(fetchedUser.id);
+    SessionController().bio = fetchedUser.bio ?? '';
+
+    // 5️⃣ Initialize socket after data update
+    SocketService().initSocket(fetchedUser.id);
+
+    // 6️⃣ Notify UI
+    notifyListeners();
+  } catch (e, st) {
+    log("❌ fetchUserDetails error: $e");
+    log("Stack: $st");
+    if (context.mounted) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        RouteName.loginScreen,
+        (route) => false,
+      );
     }
+  } finally {
+    setLoading(false);
   }
+}
+
+  // Future<void> fetchUserDetails(BuildContext context)async{
+  //  setLoading(true);
+  //   try{
+  //    await SessionController().getUserInPreference();
+  //    _userDetails=  await userRepo.getUserDetails(SessionController().token);
+  //    SocketService().initSocket(_userDetails!.id);
+  //    await SessionController().saveUserIdInPreference(_userDetails!.id);
+
+  //    notifyListeners();
+  //   }catch(e){
+  //     if(context.mounted) {
+  //       Navigator.pushNamedAndRemoveUntil(
+  //           context, RouteName.loginScreen, (route) => false);
+  //     }
+  //     log(e.toString());
+  //   }finally{
+  //     setLoading(false);
+  //   }
+  // }
+
+
 Future<void> updateProfilePic(BuildContext context)async{
     try{
     XFile? image=  await imagePickerUtils.pickImageFromGallery();

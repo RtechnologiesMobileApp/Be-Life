@@ -8,6 +8,8 @@ import 'package:be_life_style/services/auth/auth_services.dart';
 import 'package:be_life_style/services/cloudinary/cloudinary_services.dart';
 import 'package:be_life_style/utils/image_picker_utils.dart';
 import 'package:be_life_style/view_model/auth/signup_view_model.dart';
+import 'package:be_life_style/view_model/home/home_view_model.dart';
+import 'package:be_life_style/view_model/videos/my_videos_view_model.dart';
 import 'package:be_life_style/view_model/videos/post_video_view_model.dart';
 import 'package:be_life_style/view_model/profile/profile_view_model.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +49,9 @@ class MyApp extends StatelessWidget {
             ChangeNotifierProvider(
               create: (_)=>PostVideoViewModel(imagePickerUtils: getIt<ImagePickerUtils>(), videoRepo: getIt<VideoRepo>(), cloudinaryServices: getIt<CloudinaryServices>()),
               lazy: true,
-            )
+            ),
+              ChangeNotifierProvider(create: (_) => HomeViewModel()),
+            
             ],
          child: MaterialApp(
             debugShowCheckedModeBanner: false,
