@@ -90,6 +90,7 @@ class ChatViewModel with ChangeNotifier {
       );
 
       final chatIndex = _chatList.indexWhere((c) => c.chatWith == chatId);
+      await fetchChatList();
       if (chatIndex != -1) {
         final updated = _chatList[chatIndex].copyWith(
           messages: fetchedMessages,
