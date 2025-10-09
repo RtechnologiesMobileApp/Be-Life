@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:be_life_style/model/comment_response_model/comment_response_model.dart';
 import 'package:be_life_style/repo/comments/comments_repo.dart';
 import 'package:be_life_style/services/session_manager/session_controller.dart';
+import 'package:be_life_style/view_model/profile/profile_view_model.dart';
 import 'package:flutter/cupertino.dart';
 
 class CommentsViewModel with ChangeNotifier{
@@ -52,15 +53,63 @@ setLoading(false);
     }
   }
 
-  Future<void> addComment({required int id})async{
-    setLoading(true);
-    try{
-      await commentsRepo.addComment(id: id, token: SessionController().token, text: commentController.text);
-      await fetchVideoComments(id);
-    }catch(e){
-       log(e.toString());
-    }finally{
-      setLoading(false);
-    }
+Future<void> addComment({required int id, required ProfileViewModel profileVM}) async {
+  final text = commentController.text.trim();
+  if (text.isEmpty) return;
+
+  setLoading(true);
+  try {
+    // 1️⃣ API call
+    await commentsRepo.addComment(
+      id: id,
+      token: SessionController().token,
+      text: text,
+    );
+
+    // 2️⃣ Get current user info from ProfileViewModel
+    final currentUser = profileVM.userDetails;
+
+    // 3️⃣ Create temporary local comment
+    final newComment = CommentResponseModel(
+      id: DateTime.now().millisecondsSinceEpoch, // temporary unique ID
+      userId: currentUser?.id ?? 0,
+      videoId: id,
+      parentId: null,
+      isLiked: false,
+      text: text,
+      likesCount: 0,
+      createdAt: DateTime.now().toIso8601String(),
+      username: "${currentUser?.firstName ?? ''} ${currentUser?.lastName ?? ''}".trim().isNotEmpty
+          ? "${currentUser?.firstName ?? ''} ${currentUser?.lastName ?? ''}".trim()
+          : 'You',
+      profilePicture: currentUser?.profilePicture ?? '',
+      replies: const [],
+    );
+
+    // 4️⃣ Add to list instantly
+    _commentList.insert(0, newComment);
+    commentController.clear();
+    notifyListeners();
+
+    // 5️⃣ Refresh actual comments from backend
+    fetchVideoComments(id);
+  } catch (e) {
+    log("addComment error: $e");
+  } finally {
+    setLoading(false);
   }
+}
+
+  // Future<void> addComment({required int id})async{
+  //   setLoading(true);
+  //   try{
+  //     await commentsRepo.addComment(id: id, token: SessionController().token, text: commentController.text);
+  //     await fetchVideoComments(id);
+  //   }catch(e){
+  //      log(e.toString());
+  //   }finally{
+  //     setLoading(false);
+  //   }
+  // }
+
 }

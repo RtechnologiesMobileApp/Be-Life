@@ -1,3 +1,4 @@
+import 'package:be_life_style/view_model/profile/profile_view_model.dart';
 import 'package:be_life_style/view_model/videos/comments_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,7 +26,11 @@ class CommentTextField extends StatelessWidget {
             child: TextField(
               controller: cVM.commentController,
               onSubmitted: (val) {
-                cVM.addComment(id: id);
+                // cVM.addComment(id: id);
+                cVM.addComment(
+  id: id,
+  profileVM: Provider.of<ProfileViewModel>(context, listen: false),
+);
               },
               cursorColor: Colors.black,
               style: TextStyle(
@@ -47,7 +52,11 @@ class CommentTextField extends StatelessWidget {
           GestureDetector(
             onTap: () {
               if (cVM.commentController.text.trim().isNotEmpty) {
-                cVM.addComment(id: id);
+                // cVM.addComment(id: id);
+                cVM.addComment(
+  id: id,
+  profileVM: Provider.of<ProfileViewModel>(context, listen: false),
+);
                  cVM.commentController.clear();
               }
             },

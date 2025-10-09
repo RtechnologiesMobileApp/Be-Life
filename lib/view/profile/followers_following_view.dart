@@ -2,6 +2,7 @@ import 'package:be_life_style/config/locator.dart';
 import 'package:be_life_style/config/routes/route_names.dart';
 import 'package:be_life_style/model/user_model/other_user_model.dart';
 import 'package:be_life_style/repo/user/user_repo.dart';
+import 'package:be_life_style/services/session_manager/session_controller.dart';
 import 'package:be_life_style/view_model/user/followers_following_view_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -123,22 +124,58 @@ class _FollowersFollowingContentState extends State<_FollowersFollowingContent> 
     );
   }
 
-  Widget _buildUserCard(
-    BuildContext context, 
-    FollowersFollowingViewModel viewModel, 
-    OtherUserModel user
-  ) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
-      ),
-      child: Row(
-        children: [
-          InkWell(
+Widget _buildUserCard(
+  BuildContext context,
+  FollowersFollowingViewModel viewModel,
+  OtherUserModel user,
+) {
+  //final currentUserId = getIt<UserRepo>().currentUser?.id; // 👈 add this line
+
+final currentUserId = SessionController().id;
+
+  return Container(
+    margin: EdgeInsets.only(bottom: 12.h),
+    padding: EdgeInsets.all(16.w),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: Colors.grey.shade200),
+    ),
+    child: Row(
+      children: [
+        InkWell(
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              RouteName.otherUserProfileScreen,
+              arguments: {'userId': user.id},
+            );
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(25.r),
+            child: CachedNetworkImage(
+              imageUrl: user.profilePicture,
+              height: 50.h,
+              width: 50.w,
+              fit: BoxFit.cover,
+              placeholder: (context, url) => Container(
+                height: 50.h,
+                width: 50.w,
+                color: Colors.grey.shade300,
+                child: Icon(Icons.person, color: Colors.grey.shade600),
+              ),
+              errorWidget: (context, url, error) => Container(
+                height: 50.h,
+                width: 50.w,
+                color: Colors.grey.shade300,
+                child: Icon(Icons.error, color: Colors.grey.shade600),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(width: 16.w),
+        Expanded(
+          child: InkWell(
             onTap: () {
               Navigator.pushNamed(
                 context,
@@ -146,65 +183,33 @@ class _FollowersFollowingContentState extends State<_FollowersFollowingContent> 
                 arguments: {'userId': user.id},
               );
             },
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(25.r),
-              child: CachedNetworkImage(
-                imageUrl: user.profilePicture,
-                height: 50.h,
-                width: 50.w,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
-                  height: 50.h,
-                  width: 50.w,
-                  color: Colors.grey.shade300,
-                  child: Icon(Icons.person, color: Colors.grey.shade600),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${user.firstName} ${user.lastName}',
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                    color: Colors.black,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                errorWidget: (context, url, error) => Container(
-                  height: 50.h,
-                  width: 50.w,
-                  color: Colors.grey.shade300,
-                  child: Icon(Icons.error, color: Colors.grey.shade600),
+                SizedBox(height: 4.h),
+                Text(
+                  '@${user.username}',
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Colors.grey.shade600,
+                    fontSize: 14.sp,
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
-          SizedBox(width: 16.w),
-          Expanded(
-            child: InkWell(
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  RouteName.otherUserProfileScreen,
-                  arguments: {'userId': user.id},
-                );
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${user.firstName} ${user.lastName}',
-                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      color: Colors.black,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    '@${user.username}',
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: Colors.grey.shade600,
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+        ),
+        if (user.id != currentUserId) // 👈 only show buttons for *other* users
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Follow/Unfollow Button
               Container(
                 height: 36.h,
                 child: ElevatedButton(
@@ -218,8 +223,12 @@ class _FollowersFollowingContentState extends State<_FollowersFollowingContent> 
                           }
                         },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: user.isFollowing ? Colors.grey.shade300 : Colors.blue,
-                    foregroundColor: user.isFollowing ? Colors.grey.shade700 : Colors.white,
+                    backgroundColor: user.isFollowing
+                        ? Colors.grey.shade300
+                        : Colors.blue,
+                    foregroundColor: user.isFollowing
+                        ? Colors.grey.shade700
+                        : Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.r),
                     ),
@@ -232,7 +241,9 @@ class _FollowersFollowingContentState extends State<_FollowersFollowingContent> 
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              user.isFollowing ? Colors.grey.shade700 : Colors.white,
+                              user.isFollowing
+                                  ? Colors.grey.shade700
+                                  : Colors.white,
                             ),
                           ),
                         )
@@ -245,38 +256,144 @@ class _FollowersFollowingContentState extends State<_FollowersFollowingContent> 
                         ),
                 ),
               ),
-              SizedBox(width: 8.w),
-              // Message Button
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    RouteName.chatScreen,
-                    arguments: {
-                      'otherUserId': user.id,
-                      'name': '${user.firstName} ${user.lastName}',
-                      'img': user.profilePicture,
-                      'viewModel': null,
-                    },
-                  );
-                },
-                child: Container(
-                  padding: EdgeInsets.all(8.w),
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(18.r),
-                  ),
-                  child: Icon(
-                    Icons.message,
-                    color: Colors.white,
-                    size: 16.h,
-                  ),
-                ),
-              ),
             ],
           ),
-        ],
-      ),
-    );
-  }
+      ],
+    ),
+  );
+}
+
+  // Widget _buildUserCard(
+  //   BuildContext context, 
+  //   FollowersFollowingViewModel viewModel, 
+  //   OtherUserModel user
+  // ) {
+  //   return Container(
+  //     margin: EdgeInsets.only(bottom: 12.h),
+  //     padding: EdgeInsets.all(16.w),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       borderRadius: BorderRadius.circular(12),
+  //       border: Border.all(color: Colors.grey.shade200),
+  //     ),
+  //     child: Row(
+  //       children: [
+  //         InkWell(
+  //           onTap: () {
+  //             Navigator.pushNamed(
+  //               context,
+  //               RouteName.otherUserProfileScreen,
+  //               arguments: {'userId': user.id},
+  //             );
+  //           },
+  //           child: ClipRRect(
+  //             borderRadius: BorderRadius.circular(25.r),
+  //             child: CachedNetworkImage(
+  //               imageUrl: user.profilePicture,
+  //               height: 50.h,
+  //               width: 50.w,
+  //               fit: BoxFit.cover,
+  //               placeholder: (context, url) => Container(
+  //                 height: 50.h,
+  //                 width: 50.w,
+  //                 color: Colors.grey.shade300,
+  //                 child: Icon(Icons.person, color: Colors.grey.shade600),
+  //               ),
+  //               errorWidget: (context, url, error) => Container(
+  //                 height: 50.h,
+  //                 width: 50.w,
+  //                 color: Colors.grey.shade300,
+  //                 child: Icon(Icons.error, color: Colors.grey.shade600),
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //         SizedBox(width: 16.w),
+  //         Expanded(
+  //           child: InkWell(
+  //             onTap: () {
+  //               Navigator.pushNamed(
+  //                 context,
+  //                 RouteName.otherUserProfileScreen,
+  //                 arguments: {'userId': user.id},
+  //               );
+  //             },
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Text(
+  //                   '${user.firstName} ${user.lastName}',
+  //                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+  //                     color: Colors.black,
+  //                     fontSize: 16.sp,
+  //                     fontWeight: FontWeight.w600,
+  //                   ),
+  //                 ),
+  //                 SizedBox(height: 4.h),
+  //                 Text(
+  //                   '@${user.username}',
+  //                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+  //                     color: Colors.grey.shade600,
+  //                     fontSize: 14.sp,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //         Row(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             // Follow/Unfollow Button
+  //             Container(
+  //               height: 36.h,
+  //               child: ElevatedButton(
+  //                 onPressed: viewModel.isFollowLoading
+  //                     ? null
+  //                     : () {
+  //                         if (user.isFollowing) {
+  //                           viewModel.unfollowUser(user.id);
+  //                         } else {
+  //                           viewModel.followUser(user.id);
+  //                         }
+  //                       },
+  //                 style: ElevatedButton.styleFrom(
+  //                   backgroundColor: user.isFollowing ? Colors.grey.shade300 : Colors.blue,
+  //                   foregroundColor: user.isFollowing ? Colors.grey.shade700 : Colors.white,
+  //                   shape: RoundedRectangleBorder(
+  //                     borderRadius: BorderRadius.circular(18.r),
+  //                   ),
+  //                   padding: EdgeInsets.symmetric(horizontal: 16.w),
+  //                 ),
+  //                 child: viewModel.isFollowLoading
+  //                     ? SizedBox(
+  //                         height: 16.h,
+  //                         width: 16.w,
+  //                         child: CircularProgressIndicator(
+  //                           strokeWidth: 2,
+  //                           valueColor: AlwaysStoppedAnimation<Color>(
+  //                             user.isFollowing ? Colors.grey.shade700 : Colors.white,
+  //                           ),
+  //                         ),
+  //                       )
+  //                     : Text(
+  //                         user.isFollowing ? 'Unfollow' : 'Follow',
+  //                         style: TextStyle(
+  //                           fontSize: 14.sp,
+  //                           fontWeight: FontWeight.w500,
+  //                         ),
+  //                       ),
+  //               ),
+  //             ),
+  //             SizedBox(width: 8.w),
+  //             // Message Button
+              
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+
 }
