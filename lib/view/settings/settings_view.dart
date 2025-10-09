@@ -70,7 +70,7 @@ class SettingsView extends StatelessWidget {
             SettingBar(text: "Help center", img: AppImages.questionIcon, func: () { Navigator.pushNamed(context, RouteName.helpCenterScreen); },),
             SettingBar(text: "Logout", img: AppImages.logoutIcon,color: Color(0xFFFF4E4E), func: () {
               SessionController().clearSession();
-              Navigator.pushNamedAndRemoveUntil(context, RouteName.loginScreen, (route)=>false);
+              Navigator.pushNamedAndRemoveUntil(context, RouteName.welcomeScreen, (route)=>false);
               },),
 
 

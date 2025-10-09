@@ -157,7 +157,7 @@ class _InlineVideoPlayerState extends State<_InlineVideoPlayer>{
   void initState(){
     super.initState();
     _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url))
-      ..initialize().then((_){ if(mounted){ setState((){}); _controller.setLooping(true); _controller.play(); }});
+      ..initialize().then((_){ if(mounted){ setState((){}); _controller.setLooping(true); _controller.play(); debugPrint('Explore inline video auto-play'); }});
   }
   @override
   void dispose(){ _controller.dispose(); super.dispose(); }

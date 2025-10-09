@@ -181,7 +181,18 @@ class VideosViewModel with ChangeNotifier {
       VideoPlayerController.networkUrl(Uri.parse(video.videoUrl));
       controller.initialize().then((_) {
         if (!_isDisposed && hasListeners) {
+          debugPrint('Video initialized: ' + video.videoUrl);
           notifyListeners();
+          // Safeguard: ensure first video auto-plays on initial load
+          try {
+            if (_controllers.isEmpty && _currentIndex == 0) {
+              controller.setLooping(true);
+              controller.play();
+              debugPrint('Auto-playing first video');
+            }
+          } catch (e) {
+            debugPrint('Error auto-playing first video: $e');
+          }
         }
       });
 
