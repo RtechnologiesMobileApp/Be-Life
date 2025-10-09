@@ -37,8 +37,8 @@ class SocketService {
       debugPrint("✅ Socket Connected: ${_socket.id}");
       _socket.emit("join", userId);
       
-      // Set up message listener immediately after connection
-      _setupMessageListener();
+      // Set up global listeners immediately after connection
+      _setupGlobalListeners();
     });
 
     _socket.on("connect_error", (err) {
@@ -49,27 +49,29 @@ class SocketService {
     _isInitialized = true;
   }
 
-  void _setupMessageListener() {
-    print("🔥 Setting up global message listener in SocketService");
+  void _setupGlobalListeners() {
+    // Listen for incoming messages
     _socket.on("receive_message", (data) {
-      print("🔥 Global message received: $data");
-      
-      // 🔥 Increase unread count only if user is not in Inbox tab
+      // Increase unread count only if user is not in Inbox tab
       try {
         final mainNav = getIt<MainNavViewModel>();
-        print("🔥 Current selected index: ${mainNav.selectedIndex}");
         if (mainNav.selectedIndex != 1) {
-          print("🔥 Incrementing unread count. Current count: ${mainNav.unreadCount}");
           mainNav.incrementUnread();
-          print("🔥 New unread count: ${mainNav.unreadCount}");
-        } else {
-          print("🔥 User is in inbox tab, not incrementing counter");
         }
       } catch (e) {
-        print("🔥 Error accessing MainNavViewModel: $e");
+        debugPrint("Error accessing MainNavViewModel: $e");
       }
     });
-    print("🔥 Global socket listener setup complete");
+
+    // Listen for new notifications
+    _socket.on("new_notification", (data) {
+      try {
+        final mainNav = getIt<MainNavViewModel>();
+        mainNav.incrementUnread();
+      } catch (e) {
+        debugPrint("Error accessing MainNavViewModel for notification: $e");
+      }
+    });
   }
 
   void dispose() {

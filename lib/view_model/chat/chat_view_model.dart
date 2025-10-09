@@ -90,13 +90,10 @@ ScrollController get scrollController=>_scrollController;
 
   void listenReceiveMessage() {
     chatSocketService.onReceiveMessage((newMessage) {
-      log("New message received: $newMessage");
-
       try {
         final message = MessageModel.fromJson(newMessage);
         scrollToBottom();
         _messages.insert(0,message);
-
         notifyListeners();
       } catch (e) {
         log("Error parsing received message: $e");
@@ -136,6 +133,15 @@ ScrollController get scrollController=>_scrollController;
     _messages.clear();
     final fetchedMessages=  await chatRepo.fetchChatMessages(id: id, token: SessionController().token,page: _currentPage);
     _messages.addAll(fetchedMessages);
+    
+    // Emit open_chat event to join the chat room
+    chatSocketService.openChat(otherUserId: id);
+    
+    // Listen for chat history from socket
+    chatSocketService.onChatHistory((chatHistory) {
+      // Handle chat history if needed
+    });
+    
     notifyListeners();
 
     }catch(e){
@@ -150,10 +156,37 @@ ScrollController get scrollController=>_scrollController;
     scrollToBottom();
 
     _messages.insert(0,newMsg);
-   chatSocketService.sendMessage(senderId: SessionController().id!, receiverId: receiverId, content: messageController.text,);
-   messageController.clear();
+    
+    // Send message via socket with corrected parameters
+    chatSocketService.sendMessage(receiverId: receiverId, content: messageController.text);
+    
+    // Listen for message sent confirmation
+    chatSocketService.onMessageSent((sentMessage) {
+      // Update message status if needed
+    });
+    
+    messageController.clear();
     notifyListeners();
+  }
 
+  // Mark messages as read when chat is visible
+  void markAsRead(int otherUserId) {
+    chatSocketService.markMessagesAsRead(otherUserId: otherUserId);
+  }
+
+  // Handle typing indicators
+  void startTyping(int toUserId) {
+    chatSocketService.sendTyping(toUserId: toUserId);
+  }
+
+  void stopTyping(int toUserId) {
+    chatSocketService.stopTyping(toUserId: toUserId);
+  }
+
+  // Listen for typing indicators from other users
+  void setupTypingListeners(Function(dynamic) onTyping, Function(dynamic) onStopTyping) {
+    chatSocketService.onTyping(onTyping);
+    chatSocketService.onStopTyping(onStopTyping);
   }
 
 }

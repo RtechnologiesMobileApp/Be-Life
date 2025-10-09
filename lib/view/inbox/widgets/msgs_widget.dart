@@ -16,28 +16,49 @@ final int currentChatId;
 }
 
 class _MsgsWidgetState extends State<MsgsWidget> {
+  bool _isOtherUserTyping = false;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    final chatVM=Provider.of<ChatViewModel>(context,listen: false);
+    final chatVM = Provider.of<ChatViewModel>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       chatVM.scrollToBottom();
       chatVM.attachScrollListener(widget.currentChatId);
+      
+      // Setup typing listeners
+      chatVM.setupTypingListeners(
+        (data) {
+          if (data['fromUserId'] == widget.currentChatId) {
+            setState(() {
+              _isOtherUserTyping = true;
+            });
+          }
+        },
+        (data) {
+          if (data['fromUserId'] == widget.currentChatId) {
+            setState(() {
+              _isOtherUserTyping = false;
+            });
+          }
+        },
+      );
     });
-
   }
   @override
   Widget build(BuildContext context) {
     return Consumer<ChatViewModel>(
         builder: (context,chatVM,child) {
 
-          return chatVM.isLoading?CustomLoader():ListView.builder(
-             controller: chatVM.scrollController,
-              padding: EdgeInsets.zero,
-              reverse: true,
-              itemCount: chatVM.messages.length,
-              itemBuilder: (context,index){
+          return chatVM.isLoading?CustomLoader():Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  controller: chatVM.scrollController,
+                  padding: EdgeInsets.zero,
+                  reverse: true,
+                  itemCount: chatVM.messages.length,
+                  itemBuilder: (context,index){
                 final msg=chatVM.messages[index];
                 return  Align(
                   alignment: msg.senderId == SessionController().id ? Alignment.centerRight : Alignment.centerLeft, child: Padding(
@@ -81,7 +102,46 @@ class _MsgsWidgetState extends State<MsgsWidget> {
                   ),
                 ),
                 );
-              });
+              }),
+              ),
+              // Typing indicator
+              if (_isOtherUserTyping)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            width: 20.w,
+                            height: 20.h,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          ),
+                          SizedBox(width: 8.w),
+                          Text(
+                            "Typing...",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          );
         }
     );
   }
