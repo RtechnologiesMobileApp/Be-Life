@@ -29,7 +29,12 @@ class ForYouScreen extends StatelessWidget {
             controller: vVM.pageController,
             scrollDirection: Axis.vertical,
             itemCount: vVM.fetchedVideos.length,
-            onPageChanged: (index) => vVM.setCurrentIndex(index),
+            // onPageChanged: (index) => vVM.setCurrentIndex(index),
+            onPageChanged: (index) {
+  vVM.setCurrentIndex(index);
+  vVM.playCurrentVideo(index);
+},
+
             itemBuilder: (context, index) {
               return VideoPlayerWidget(
                 controller: vVM.controllers[index], videoData: vVM.fetchedVideos[index],

@@ -8,6 +8,7 @@ class SessionController{
   String token='';
   bool? isLoggedin;
   int? id;
+  String? bio;
    SessionController._internal(){
     isLoggedin=false;
   }

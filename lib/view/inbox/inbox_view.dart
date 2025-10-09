@@ -1,6 +1,4 @@
 import 'package:be_life_style/config/routes/route_names.dart';
-import 'package:be_life_style/utils/app_images.dart';
-import 'package:be_life_style/view/inbox/widgets/chat_card.dart';
 import 'package:be_life_style/view/inbox/widgets/direct_msg_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

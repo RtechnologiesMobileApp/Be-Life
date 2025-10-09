@@ -17,6 +17,7 @@ class PostVideoBtn extends StatelessWidget {
     return  Selector<PostVideoViewModel,bool>(
       selector: (_,pVM)=>pVM.isLoading,
       builder: (_,isLoading,_) {
+     
        return isLoading?CustomLoader(): CustomButton(text: "Post",
             onPressed: () async{
          await context.read<PostVideoViewModel>().postVideo();

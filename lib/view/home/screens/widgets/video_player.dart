@@ -28,7 +28,13 @@ class VideoPlayerWidget extends StatelessWidget {
                 child: SizedBox(
                   width: controller.value.size.width,
                   height: controller.value.size.height,
-                  child: VideoPlayer(controller),
+                      child: GestureDetector(
+                        onTap: () {
+                          try { controller.setVolume(1.0); } catch (_) {}
+                          context.read<HomeViewModel>().playPause(controller);
+                        },
+                        child: VideoPlayer(controller),
+                      ),
                 ),
               )
                   : Center(child: CircularProgressIndicator(color: Colors.grey,)),
@@ -43,7 +49,8 @@ class VideoPlayerWidget extends StatelessWidget {
               Positioned(
                 right: 0,
                 bottom: 16,
-                child: RightBar(videoData: videoData,)
+                //child: RightBar(videoData: videoData, viewModel: hVm,)
+                 child: RightBar(videoData: videoData, )
               ),
               Positioned(
                 left: 0,

@@ -11,6 +11,8 @@ class VideosViewModel with ChangeNotifier {
     index == 1 ? fetchForYouVideos() : fetchFollowingVideos();
   }
 
+ 
+
   final VideoRepo videosRepo;
   final PageController pageController = PageController();
 
@@ -181,7 +183,19 @@ class VideosViewModel with ChangeNotifier {
       VideoPlayerController.networkUrl(Uri.parse(video.videoUrl));
       controller.initialize().then((_) {
         if (!_isDisposed && hasListeners) {
+          debugPrint('Video initialized: ' + video.videoUrl);
+          try { controller.setVolume(1.0); } catch (_) {}
           notifyListeners();
+          // Safeguard: ensure first video auto-plays on initial load
+          try {
+            if (_controllers.isEmpty && _currentIndex == 0) {
+              controller.setLooping(true);
+              controller.play();
+              debugPrint('Auto-playing first video');
+            }
+          } catch (e) {
+            debugPrint('Error auto-playing first video: $e');
+          }
         }
       });
 
@@ -195,6 +209,7 @@ class VideosViewModel with ChangeNotifier {
         hasListeners &&
         _controllers.length > _currentIndex) {
       try {
+        try { _controllers[_currentIndex].setVolume(1.0); } catch (_) {}
         _controllers[_currentIndex].play();
       } catch (e) {
         log("Error playing controller: $e");
@@ -204,11 +219,27 @@ class VideosViewModel with ChangeNotifier {
 
   void playPause(VideoPlayerController controller) {
     if (!_isDisposed && hasListeners) {
-      controller.value.isPlaying ? controller.pause() : controller.play();
+      if (controller.value.isPlaying) {
+        controller.pause();
+      } else {
+        try { controller.setVolume(1.0); } catch (_) {}
+        controller.play();
+      }
       notifyListeners();
     }
   }
 
+void playCurrentVideo(int index) {
+  for (int i = 0; i < controllers.length; i++) {
+    if (i == index) {
+      controllers[i].play();
+    } else {
+      controllers[i].pause();
+    }
+  }
+}
+
+ 
   void pauseAllVideos() {
     if (!_isDisposed && _controllers.isNotEmpty) {
       for (var controller in _controllers) {

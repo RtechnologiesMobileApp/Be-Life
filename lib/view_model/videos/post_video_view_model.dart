@@ -6,8 +6,11 @@ import 'package:be_life_style/model/video_model/video_model.dart';
 import 'package:be_life_style/repo/video/video_repo.dart';
 import 'package:be_life_style/services/cloudinary/cloudinary_services.dart';
 import 'package:be_life_style/services/session_manager/session_controller.dart';
+import 'package:be_life_style/utils/location_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:be_life_style/utils/image_picker_utils.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get_thumbnail_video/index.dart';
 import 'package:get_thumbnail_video/video_thumbnail.dart';
 import 'package:video_player/video_player.dart';
@@ -26,6 +29,7 @@ class PostVideoViewModel with ChangeNotifier{
   Uint8List? get thumbnail=>_thumbnail;
   XFile? _customThumbnail;
   XFile ? get customThumbnail=>_customThumbnail;
+   String? currentLocation;
 final captionController=TextEditingController();
 bool _visibility=true;
 bool get visibility =>_visibility;
@@ -72,6 +76,40 @@ List<OtherUserModel> get taggedUsers => _taggedUsers;
     _taggedUsers.removeWhere((tagged) => tagged.id == user.id);
     notifyListeners();
   }
+
+  Future<void> getCurrentLocation() async {
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) return;
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) return;
+      }
+
+      if (permission == LocationPermission.deniedForever) return;
+
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      if (placemarks.isNotEmpty) {
+        final p = placemarks.first;
+        currentLocation = "${p.locality}, ${p.country}";
+        notifyListeners();
+      }
+    } catch (e) {
+      print("❌ Location error: $e");
+    }
+  }
+ 
+ 
   Future<void> pickCoverFromGallery()async{
     setLoading(true);
     try{
@@ -141,29 +179,58 @@ Future<void> postVideo()async{
       _thumbnailUrl= await cloudinaryServices.uploadFile(customThumbnail!);
     }
     final meta = await getVideoMetaData(_pickedVideo!);
-    if(videoUrl!=null && _thumbnailUrl!=null){
-      VideoModel videoDetails=VideoModel(
-          PrivacyType:visibility?"public":"private",
-          videoCaption: captionController.text,
-          ageRestricted: false,
-          videoUrl: videoUrl,
-          thumbnailUrl: _thumbnailUrl!,
-          videoGenre: 'motivation',
-          ShareLink: 'asdasdas',
-          locationTag: "Lahore,Pakistan",
-          duration: meta['duration'],
-          originalAudioOwnerId: SessionController().id!,
-          videoResolution: meta['resolution'],
-          videoRatio: meta['ratio'],
-          isOriginalSound: true);
-      debugPrint(videoDetails.toString());
-        await videoRepo.publishVideo(videoDetails: videoDetails, token: SessionController().token);
 
-    }
+// ✅ Fetch location
+final locationTag = await LocationHelper.getCurrentLocationTag() ?? "Unknown Location";
+
+if (videoUrl != null && _thumbnailUrl != null) {
+  VideoModel videoDetails = VideoModel(
+    PrivacyType: visibility ? "public" : "private",
+    videoCaption: captionController.text,
+    ageRestricted: false,
+    videoUrl: videoUrl,
+    thumbnailUrl: _thumbnailUrl!,
+    videoGenre: 'motivation',
+    ShareLink: 'asdasdas',
+    locationTag: locationTag, // ✅ Dynamic location tag
+    duration: meta['duration'],
+    originalAudioOwnerId: SessionController().id!,
+    videoResolution: meta['resolution'],
+    videoRatio: meta['ratio'],
+    isOriginalSound: true,
+    //taggedUsers: _taggedUsers.map((user) => user.id).toList(),
+  );
+
+  debugPrint("🎯 Video Location: $locationTag");
+  await videoRepo.publishVideo(videoDetails: videoDetails, token: SessionController().token);
+}
+
+    // final meta = await getVideoMetaData(_pickedVideo!);
+    // if(videoUrl!=null && _thumbnailUrl!=null){
+    //   VideoModel videoDetails=VideoModel(
+    //       PrivacyType:visibility?"public":"private",
+    //       videoCaption: captionController.text,
+    //       ageRestricted: false,
+    //       videoUrl: videoUrl,
+    //       thumbnailUrl: _thumbnailUrl!,
+    //       videoGenre: 'motivation',
+    //       ShareLink: 'asdasdas',
+    //       locationTag: "Lahore,Pakistan",
+    //       duration: meta['duration'],
+    //       originalAudioOwnerId: SessionController().id!,
+    //       videoResolution: meta['resolution'],
+    //       videoRatio: meta['ratio'],
+    //       isOriginalSound: true);
+    //   debugPrint(videoDetails.toString());
+    //     await videoRepo.publishVideo(videoDetails: videoDetails, token: SessionController().token);
+
+    // }
     }catch(e){
       log(e.toString());
     }finally{
       setLoading(false);
     }
 }
+
+
 }

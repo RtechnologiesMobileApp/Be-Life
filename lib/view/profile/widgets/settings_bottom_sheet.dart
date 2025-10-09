@@ -15,12 +15,12 @@ class SettingsBottomSheet extends StatelessWidget {
       child: Column(mainAxisSize: MainAxisSize.min,
         children: [
         SizedBox(height: 8.h,),
-      ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 16.w),
-        leading: SvgPicture.asset(AppImages.userStarIcon),
-        title: Text("Creator dashboard",style: Theme.of(context).textTheme.bodyMedium!.copyWith(color:AppColors.black ),),
-       trailing: Icon(Icons.arrow_forward_ios,size: 18.h,),
-      ),
+      // ListTile(
+      //   contentPadding: EdgeInsets.symmetric(horizontal: 16.w),
+      //   leading: SvgPicture.asset(AppImages.userStarIcon),
+      //   title: Text("Creator dashboard",style: Theme.of(context).textTheme.bodyMedium!.copyWith(color:AppColors.black ),),
+      //  trailing: Icon(Icons.arrow_forward_ios,size: 18.h,),
+      // ),
         SizedBox(height: 2.h,),
         ListTile(
           onTap: (){

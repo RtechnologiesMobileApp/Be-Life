@@ -50,18 +50,19 @@ class LeftBar extends StatelessWidget {
           ),
           SizedBox(height: 6.h,),
 
-          Container(
-              height: 21.h,
-              width: 102.w,
-              decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(100)
-              ),
-              child: ClipRRect(
-                child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaY: 25,sigmaX: 25),
-                    child: Center(child: Text("Creator earns commission",style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 8.sp),))),
-              )),
+          // Container(
+          //     height: 21.h,
+          //     width: 102.w,
+          //     decoration: BoxDecoration(
+          //         color: Colors.white.withValues(alpha: 0.05),
+          //         borderRadius: BorderRadius.circular(100)
+          //     ),
+              // child: ClipRRect(
+              //   child: BackdropFilter(
+              //       filter: ImageFilter.blur(sigmaY: 25,sigmaX: 25),
+              //       child: Center(child: Text("Creator earns commission",style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 8.sp),))),
+              // )
+            //  ),
           SizedBox(height: 16.h,),
 
         ],

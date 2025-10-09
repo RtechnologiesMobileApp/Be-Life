@@ -20,7 +20,7 @@ class ProfileHeader extends StatelessWidget {
         return pVM.isLoading?ProfileHeaderShimmer():Column(children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: 34.h, width: 34.w),
               SizedBox(
@@ -61,11 +61,11 @@ class ProfileHeader extends StatelessWidget {
                           child: SvgPicture.asset(AppImages.camIcon)),
                     ],
                   )),
-              Container(
-                  height: 34.h,
-                  width: 34.w,
-                  padding: EdgeInsets.only(right: 19.w),
-                  child: Icon(CupertinoIcons.gift)),
+              // Container(
+              //     height: 34.h,
+              //     width: 34.w,
+              //     padding: EdgeInsets.only(right: 19.w),
+              //     child: Icon(CupertinoIcons.gift)),
             ],
           ),
           SizedBox(height: 24.h),
@@ -137,12 +137,27 @@ class ProfileHeader extends StatelessWidget {
           SizedBox(height: 12.h),
 
           // Bio
-          Text(
-            textAlign: TextAlign.center,
-            "Adventure seeker 🌍 Travel enthusiast ✈️ Sharing the world's most beautiful destinations 🌄",
-            style: Theme.of(context).textTheme.bodyLarge!
-                .copyWith(fontSize: 14.sp, color: Color(0xFF202020), letterSpacing: 0.3),
-          ),
+          // Text(
+          //   textAlign: TextAlign.center,
+          //   "Adventure seeker 🌍 Travel enthusiast ✈️ Sharing the world's most beautiful destinations 🌄",
+          //   style: Theme.of(context).textTheme.bodyLarge!
+          //       .copyWith(fontSize: 14.sp, color: Color(0xFF202020), letterSpacing: 0.3),
+          // ),
+          // Bio
+// Bio
+Text(
+  textAlign: TextAlign.center,
+  (pVM.userDetails?.bio?.trim().isNotEmpty ?? false)
+      ? pVM.userDetails!.bio!.trim()
+      : "No bio added",
+  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+        fontSize: 14.sp,
+        color: const Color(0xFF202020),
+        letterSpacing: 0.3,
+      ),
+),
+
+
           SizedBox(height: 16.h),
 
         ],);

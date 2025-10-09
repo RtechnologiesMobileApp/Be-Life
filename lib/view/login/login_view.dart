@@ -1,4 +1,5 @@
 import 'package:another_flushbar/flushbar.dart';
+import 'package:be_life_style/config/routes/route_names.dart';
 import 'package:be_life_style/res/components/custom_loader.dart';
 import 'package:be_life_style/services/auth/auth_services.dart';
 import 'package:be_life_style/utils/app_images.dart';
@@ -77,20 +78,29 @@ class LoginView extends StatelessWidget {
                 
                       }, ),
                     SizedBox(height: 24.h,),
-                    Row( spacing: 10,
-                      children: [
-                        Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.15),)),
-                        Text("OR",style: Theme.of(context).textTheme.bodyMedium),
-                        Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.15),)),
-                      ],
-                    ),
+                    
+                    // Row( spacing: 10,
+                    //   children: [
+                    //     Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.15),)),
+                    //     Text("OR",style: Theme.of(context).textTheme.bodyMedium),
+                    //     Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.15),)),
+                    //   ],
+                    // ),
+                      CustomButton(text: "Sign up", onPressed: (){
+             Navigator.pushNamed(context, RouteName.nameInputScreen);
+
+           },color: Colors.white.withValues(alpha: 0.84),textStyle:Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.black)),
+
                     SizedBox(height: 24.h,),
-                    CustomButton(prefixIcon: SvgPicture.asset(AppImages.googleIcon),text: "Continue with Google", onPressed: (){},color: Colors.white.withValues(alpha: 0.20),textStyle: Theme.of(context).textTheme.bodyLarge),
-                    SizedBox(height: 8.h,),
-                    CustomButton(prefixIcon: SvgPicture.asset(AppImages.appleIcon),text: "Continue with Apple", onPressed: (){},color: Colors.white.withValues(alpha: 0.20),textStyle: Theme.of(context).textTheme.bodyLarge),
-                    SizedBox(height: 30.h),
-                  ],),
-              ),)),
+                    // CustomButton(prefixIcon: SvgPicture.asset(AppImages.googleIcon),text: "Continue with Google", onPressed: (){},color: Colors.white.withValues(alpha: 0.20),textStyle: Theme.of(context).textTheme.bodyLarge),
+                    // SizedBox(height: 8.h,),
+                    // CustomButton(prefixIcon: SvgPicture.asset(AppImages.appleIcon),text: "Continue with Apple", onPressed: (){},color: Colors.white.withValues(alpha: 0.20),textStyle: Theme.of(context).textTheme.bodyLarge),
+                    // SizedBox(height: 30.h),
+                  ],
+                  ),
+              ),
+              )
+              ),
           );
         }
       ),

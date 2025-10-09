@@ -17,6 +17,7 @@ _UserModel _$UserModelFromJson(Map<String, dynamic> json) => _UserModel(
   interests:
       (json['interests'] as List<dynamic>).map((e) => e as String).toList(),
   profilePicture: json['profilePicture'] as String,
+  bio: json['bio'] as String?,
   password: json['password'] as String?,
   followersCount: (json['followersCount'] as num?)?.toInt(),
   followingCount: (json['followingCount'] as num?)?.toInt(),
@@ -34,6 +35,7 @@ Map<String, dynamic> _$UserModelToJson(_UserModel instance) =>
       'phoneNumber': instance.phoneNumber,
       'interests': instance.interests,
       'profilePicture': instance.profilePicture,
+      'bio': instance.bio,
       'password': instance.password,
       'followersCount': instance.followersCount,
       'followingCount': instance.followingCount,

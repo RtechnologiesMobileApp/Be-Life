@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OtherUserModel {
 
- int get id; String get username; String get firstName; String get lastName; String? get email; String get profilePicture; List<String> get interests; int? get followersCount; int? get followingCount; int? get likesCount; bool get isFollowing; bool get isFollowedBy;
+ int get id; String get username; String get firstName; String get lastName; String? get email; String get profilePicture; List<String> get interests; int? get followersCount; int? get followingCount; int? get likesCount; bool get isFollowing; bool get isFollowedBy; String? get bio;
 /// Create a copy of OtherUserModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $OtherUserModelCopyWith<OtherUserModel> get copyWith => _$OtherUserModelCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OtherUserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.username, username) || other.username == username)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.email, email) || other.email == email)&&(identical(other.profilePicture, profilePicture) || other.profilePicture == profilePicture)&&const DeepCollectionEquality().equals(other.interests, interests)&&(identical(other.followersCount, followersCount) || other.followersCount == followersCount)&&(identical(other.followingCount, followingCount) || other.followingCount == followingCount)&&(identical(other.likesCount, likesCount) || other.likesCount == likesCount)&&(identical(other.isFollowing, isFollowing) || other.isFollowing == isFollowing)&&(identical(other.isFollowedBy, isFollowedBy) || other.isFollowedBy == isFollowedBy));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OtherUserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.username, username) || other.username == username)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.email, email) || other.email == email)&&(identical(other.profilePicture, profilePicture) || other.profilePicture == profilePicture)&&const DeepCollectionEquality().equals(other.interests, interests)&&(identical(other.followersCount, followersCount) || other.followersCount == followersCount)&&(identical(other.followingCount, followingCount) || other.followingCount == followingCount)&&(identical(other.likesCount, likesCount) || other.likesCount == likesCount)&&(identical(other.isFollowing, isFollowing) || other.isFollowing == isFollowing)&&(identical(other.isFollowedBy, isFollowedBy) || other.isFollowedBy == isFollowedBy)&&(identical(other.bio, bio) || other.bio == bio));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,username,firstName,lastName,email,profilePicture,const DeepCollectionEquality().hash(interests),followersCount,followingCount,likesCount,isFollowing,isFollowedBy);
+int get hashCode => Object.hash(runtimeType,id,username,firstName,lastName,email,profilePicture,const DeepCollectionEquality().hash(interests),followersCount,followingCount,likesCount,isFollowing,isFollowedBy,bio);
 
 @override
 String toString() {
-  return 'OtherUserModel(id: $id, username: $username, firstName: $firstName, lastName: $lastName, email: $email, profilePicture: $profilePicture, interests: $interests, followersCount: $followersCount, followingCount: $followingCount, likesCount: $likesCount, isFollowing: $isFollowing, isFollowedBy: $isFollowedBy)';
+  return 'OtherUserModel(id: $id, username: $username, firstName: $firstName, lastName: $lastName, email: $email, profilePicture: $profilePicture, interests: $interests, followersCount: $followersCount, followingCount: $followingCount, likesCount: $likesCount, isFollowing: $isFollowing, isFollowedBy: $isFollowedBy, bio: $bio)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $OtherUserModelCopyWith<$Res>  {
   factory $OtherUserModelCopyWith(OtherUserModel value, $Res Function(OtherUserModel) _then) = _$OtherUserModelCopyWithImpl;
 @useResult
 $Res call({
- int id, String username, String firstName, String lastName, String? email, String profilePicture, List<String> interests, int? followersCount, int? followingCount, int? likesCount, bool isFollowing, bool isFollowedBy
+ int id, String username, String firstName, String lastName, String? email, String profilePicture, List<String> interests, int? followersCount, int? followingCount, int? likesCount, bool isFollowing, bool isFollowedBy, String? bio
 });
 
 
@@ -63,7 +63,7 @@ class _$OtherUserModelCopyWithImpl<$Res>
 
 /// Create a copy of OtherUserModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? username = null,Object? firstName = null,Object? lastName = null,Object? email = freezed,Object? profilePicture = null,Object? interests = null,Object? followersCount = freezed,Object? followingCount = freezed,Object? likesCount = freezed,Object? isFollowing = null,Object? isFollowedBy = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? username = null,Object? firstName = null,Object? lastName = null,Object? email = freezed,Object? profilePicture = null,Object? interests = null,Object? followersCount = freezed,Object? followingCount = freezed,Object? likesCount = freezed,Object? isFollowing = null,Object? isFollowedBy = null,Object? bio = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
@@ -77,7 +77,8 @@ as int?,followingCount: freezed == followingCount ? _self.followingCount : follo
 as int?,likesCount: freezed == likesCount ? _self.likesCount : likesCount // ignore: cast_nullable_to_non_nullable
 as int?,isFollowing: null == isFollowing ? _self.isFollowing : isFollowing // ignore: cast_nullable_to_non_nullable
 as bool,isFollowedBy: null == isFollowedBy ? _self.isFollowedBy : isFollowedBy // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,bio: freezed == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -88,7 +89,7 @@ as bool,
 
 
 class _OtherUserModel implements OtherUserModel {
-  const _OtherUserModel({this.id = -1, required this.username, required this.firstName, required this.lastName, this.email, required this.profilePicture, final  List<String> interests = const [], this.followersCount, this.followingCount, this.likesCount, this.isFollowing = false, this.isFollowedBy = false}): _interests = interests;
+  const _OtherUserModel({this.id = -1, required this.username, required this.firstName, required this.lastName, this.email, required this.profilePicture, final  List<String> interests = const [], this.followersCount, this.followingCount, this.likesCount, this.isFollowing = false, this.isFollowedBy = false, this.bio = ''}): _interests = interests;
   
 
 @override@JsonKey() final  int id;
@@ -109,6 +110,7 @@ class _OtherUserModel implements OtherUserModel {
 @override final  int? likesCount;
 @override@JsonKey() final  bool isFollowing;
 @override@JsonKey() final  bool isFollowedBy;
+@override@JsonKey() final  String? bio;
 
 /// Create a copy of OtherUserModel
 /// with the given fields replaced by the non-null parameter values.
@@ -120,16 +122,16 @@ _$OtherUserModelCopyWith<_OtherUserModel> get copyWith => __$OtherUserModelCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OtherUserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.username, username) || other.username == username)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.email, email) || other.email == email)&&(identical(other.profilePicture, profilePicture) || other.profilePicture == profilePicture)&&const DeepCollectionEquality().equals(other._interests, _interests)&&(identical(other.followersCount, followersCount) || other.followersCount == followersCount)&&(identical(other.followingCount, followingCount) || other.followingCount == followingCount)&&(identical(other.likesCount, likesCount) || other.likesCount == likesCount)&&(identical(other.isFollowing, isFollowing) || other.isFollowing == isFollowing)&&(identical(other.isFollowedBy, isFollowedBy) || other.isFollowedBy == isFollowedBy));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OtherUserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.username, username) || other.username == username)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.email, email) || other.email == email)&&(identical(other.profilePicture, profilePicture) || other.profilePicture == profilePicture)&&const DeepCollectionEquality().equals(other._interests, _interests)&&(identical(other.followersCount, followersCount) || other.followersCount == followersCount)&&(identical(other.followingCount, followingCount) || other.followingCount == followingCount)&&(identical(other.likesCount, likesCount) || other.likesCount == likesCount)&&(identical(other.isFollowing, isFollowing) || other.isFollowing == isFollowing)&&(identical(other.isFollowedBy, isFollowedBy) || other.isFollowedBy == isFollowedBy)&&(identical(other.bio, bio) || other.bio == bio));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,username,firstName,lastName,email,profilePicture,const DeepCollectionEquality().hash(_interests),followersCount,followingCount,likesCount,isFollowing,isFollowedBy);
+int get hashCode => Object.hash(runtimeType,id,username,firstName,lastName,email,profilePicture,const DeepCollectionEquality().hash(_interests),followersCount,followingCount,likesCount,isFollowing,isFollowedBy,bio);
 
 @override
 String toString() {
-  return 'OtherUserModel(id: $id, username: $username, firstName: $firstName, lastName: $lastName, email: $email, profilePicture: $profilePicture, interests: $interests, followersCount: $followersCount, followingCount: $followingCount, likesCount: $likesCount, isFollowing: $isFollowing, isFollowedBy: $isFollowedBy)';
+  return 'OtherUserModel(id: $id, username: $username, firstName: $firstName, lastName: $lastName, email: $email, profilePicture: $profilePicture, interests: $interests, followersCount: $followersCount, followingCount: $followingCount, likesCount: $likesCount, isFollowing: $isFollowing, isFollowedBy: $isFollowedBy, bio: $bio)';
 }
 
 
@@ -140,7 +142,7 @@ abstract mixin class _$OtherUserModelCopyWith<$Res> implements $OtherUserModelCo
   factory _$OtherUserModelCopyWith(_OtherUserModel value, $Res Function(_OtherUserModel) _then) = __$OtherUserModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String username, String firstName, String lastName, String? email, String profilePicture, List<String> interests, int? followersCount, int? followingCount, int? likesCount, bool isFollowing, bool isFollowedBy
+ int id, String username, String firstName, String lastName, String? email, String profilePicture, List<String> interests, int? followersCount, int? followingCount, int? likesCount, bool isFollowing, bool isFollowedBy, String? bio
 });
 
 
@@ -157,7 +159,7 @@ class __$OtherUserModelCopyWithImpl<$Res>
 
 /// Create a copy of OtherUserModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? username = null,Object? firstName = null,Object? lastName = null,Object? email = freezed,Object? profilePicture = null,Object? interests = null,Object? followersCount = freezed,Object? followingCount = freezed,Object? likesCount = freezed,Object? isFollowing = null,Object? isFollowedBy = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? username = null,Object? firstName = null,Object? lastName = null,Object? email = freezed,Object? profilePicture = null,Object? interests = null,Object? followersCount = freezed,Object? followingCount = freezed,Object? likesCount = freezed,Object? isFollowing = null,Object? isFollowedBy = null,Object? bio = freezed,}) {
   return _then(_OtherUserModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
@@ -171,7 +173,8 @@ as int?,followingCount: freezed == followingCount ? _self.followingCount : follo
 as int?,likesCount: freezed == likesCount ? _self.likesCount : likesCount // ignore: cast_nullable_to_non_nullable
 as int?,isFollowing: null == isFollowing ? _self.isFollowing : isFollowing // ignore: cast_nullable_to_non_nullable
 as bool,isFollowedBy: null == isFollowedBy ? _self.isFollowedBy : isFollowedBy // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,bio: freezed == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

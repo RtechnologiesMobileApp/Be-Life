@@ -17,6 +17,7 @@ abstract class UserModel with _$UserModel {
     required String phoneNumber,
     required List<String> interests,
     required String profilePicture,
+     String? bio,
      String? password,
      int? followersCount,
      int? followingCount,
