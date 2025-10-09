@@ -17,6 +17,7 @@ abstract class OtherUserModel with _$OtherUserModel {
     int? likesCount,
     @Default(false) bool isFollowing,
     @Default(false) bool isFollowedBy,
+     @Default('') String?  bio,
   }) = _OtherUserModel;
 
   factory OtherUserModel.fromJson(Map<String, dynamic> json) {

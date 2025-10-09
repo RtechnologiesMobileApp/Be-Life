@@ -307,12 +307,24 @@ class _OtherUserProfileContentState extends State<_OtherUserProfileContent> {
         SizedBox(height: 12.h),
 
         // Bio
-        Text(
-          textAlign: TextAlign.center,
-          "Adventure seeker 🌍 Travel enthusiast ✈️ Sharing the world's most beautiful destinations 🌄",
-          style: Theme.of(context).textTheme.bodyLarge!
-              .copyWith(fontSize: 14.sp, color: Color(0xFF202020), letterSpacing: 0.3),
-        ),
+  Text(
+  textAlign: TextAlign.center,
+  (user.bio?.trim().isNotEmpty ?? false)
+      ? user.bio!.trim()
+      : "No bio added",
+  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+        fontSize: 14.sp,
+        color: const Color(0xFF202020),
+        letterSpacing: 0.3,
+      ),
+),
+
+        // Text(
+        //   textAlign: TextAlign.center,
+        //   "Adventure seeker 🌍 Travel enthusiast ✈️ Sharing the world's most beautiful destinations 🌄",
+        //   style: Theme.of(context).textTheme.bodyLarge!
+        //       .copyWith(fontSize: 14.sp, color: Color(0xFF202020), letterSpacing: 0.3),
+        // ),
         SizedBox(height: 16.h),
       ],
     );
