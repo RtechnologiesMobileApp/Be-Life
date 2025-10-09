@@ -21,9 +21,11 @@ class ExploreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       backgroundColor: Colors.white,
       body: ChangeNotifierProvider(
-        create: (_)=>ExploreViewModel(videosRepo: getIt<VideoRepo>())..loadExploreVideos(),
+       create: (_)=>ExploreViewModel(videosRepo: getIt<VideoRepo>())..loadExploreVideos(),
+      
         child: SafeArea(
           child: Column(
             children: [
@@ -108,29 +110,32 @@ class ExploreScreen extends StatelessWidget {
 
 }
 
-class _ExploreVideoPage extends StatelessWidget{
+class _ExploreVideoPage extends StatelessWidget {
   const _ExploreVideoPage({required this.video});
   final VideoModel video;
+
   @override
   Widget build(BuildContext context) {
+    // 🟢 Yahan add karo
+    final exVm = context.read<ExploreViewModel>();
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Center(
         child: AspectRatio(
-          aspectRatio: 9/16,
+          aspectRatio: 9 / 16,
           child: Stack(
             children: [
-              // Reuse the same player UI as feed by navigating to feed would be heavy; show a simple full player here
-              // Use a lightweight VideoPlayerController without view model
               _InlineVideoPlayer(url: video.videoUrl),
+
+              // ❤️ Right bar
               Positioned(
                 right: 0,
                 bottom: 16,
-                child: ChangeNotifierProvider(
-                  create: (_) => VideosViewModel(videosRepo: getIt<VideoRepo>(), index: 1),
-                  child: RightBar(videoData: video),
-                ),
+                child: RightBar(videoData: video),
               ),
+
+              // 👈 Left bar
               Positioned(
                 left: 0,
                 bottom: 16,
@@ -144,6 +149,9 @@ class _ExploreVideoPage extends StatelessWidget{
   }
 }
 
+ 
+
+ 
 class _InlineVideoPlayer extends StatefulWidget{
   const _InlineVideoPlayer({required this.url});
   final String url;

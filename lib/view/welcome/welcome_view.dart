@@ -39,7 +39,8 @@ class WelcomeView extends StatelessWidget {
 
            },color: Colors.white.withValues(alpha: 0.84),textStyle:Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.black)),
 
-            ],),
+            ]
+            ,),
         ))
         ],
       )

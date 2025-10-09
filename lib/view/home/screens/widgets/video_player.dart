@@ -49,7 +49,8 @@ class VideoPlayerWidget extends StatelessWidget {
               Positioned(
                 right: 0,
                 bottom: 16,
-                child: RightBar(videoData: videoData,)
+                //child: RightBar(videoData: videoData, viewModel: hVm,)
+                 child: RightBar(videoData: videoData, )
               ),
               Positioned(
                 left: 0,
