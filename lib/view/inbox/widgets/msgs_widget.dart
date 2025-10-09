@@ -141,8 +141,8 @@ class _MsgsWidgetState extends State<MsgsWidget> {
                                             msg.senderId ==
                                                     SessionController().id
                                                 ? Colors.white
-                                                : Colors.white.withValues(
-                                                  alpha: 0.12,
+                                                : Colors.black.withValues(
+                                                  alpha: 0.2,
                                                 ),
                                       ),
                                       child: Text(

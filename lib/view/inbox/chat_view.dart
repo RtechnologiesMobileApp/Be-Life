@@ -81,7 +81,7 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
             ),
           ),
         ),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))],
+        // actions: [IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))],
       ),
       body: Consumer<ChatViewModel>(
         builder: (context, cVM, _) {
