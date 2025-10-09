@@ -9,6 +9,7 @@ class ChatSocketService {
     required int receiverId,
     required String content,
   }) {
+    print("🔵 CHAT_DEBUG [SOCKET]: Socket emitting send_message with receiverId: $receiverId, content: $content");
     _socket.emit("send_message", {
       "receiverId": receiverId,
       "content": content,
@@ -17,23 +18,28 @@ class ChatSocketService {
 
   // Open a chat and listen for chat history
   void openChat({required int otherUserId}) {
+    print("🔵 CHAT_DEBUG [SOCKET]: Socket emitting open_chat with otherUserId: $otherUserId");
     _socket.emit("open_chat", {"otherUserId": otherUserId});
   }
 
   // Listen for chat history when opening a chat
   void onChatHistory(Function(dynamic messages) callback) {
+    print("🔵 CHAT_DEBUG [SOCKET]: Socket setting up chat_history listener");
     _socket.on("chat_history", callback);
   }
 
   // Listen for incoming messages
   void onReceiveMessage(Function(dynamic message) callback) {
+    print("🔵 CHAT_DEBUG [SOCKET]: Socket setting up receive_message listener");
     _socket.on("receive_message", (data) {
+      print("🔵 CHAT_DEBUG [SOCKET]: Socket received message: $data");
       callback(data);
     });
   }
 
   // Listen for message sent confirmation
   void onMessageSent(Function(dynamic message) callback) {
+    print("🔵 CHAT_DEBUG [SOCKET]: Socket setting up message_sent listener");
     _socket.on("message_sent", callback);
   }
 
@@ -62,6 +68,7 @@ class ChatSocketService {
   void markMessagesAsRead({
     required int otherUserId,
   }) {
+    print("🔵 CHAT_DEBUG [SOCKET]: Socket emitting mark_as_read with otherUserId: $otherUserId");
     _socket.emit("mark_as_read", {
       "otherUserId": otherUserId,
     });

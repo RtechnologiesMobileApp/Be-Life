@@ -21,25 +21,31 @@ class _MsgsWidgetState extends State<MsgsWidget> {
   @override
   void initState() {
     super.initState();
+    print("🔵 CHAT_DEBUG [UI]: MsgsWidget initState for currentChatId: ${widget.currentChatId}");
     final chatVM = Provider.of<ChatViewModel>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("🔵 CHAT_DEBUG [UI]: MsgsWidget postFrameCallback - setting up scroll and typing");
       chatVM.scrollToBottom();
       chatVM.attachScrollListener(widget.currentChatId);
       
       // Setup typing listeners
       chatVM.setupTypingListeners(
         (data) {
+          print("🔵 CHAT_DEBUG: Typing event received: $data");
           if (data['fromUserId'] == widget.currentChatId) {
             setState(() {
               _isOtherUserTyping = true;
             });
+            print("🔵 CHAT_DEBUG: Setting typing indicator to true");
           }
         },
         (data) {
+          print("🔵 CHAT_DEBUG: Stop typing event received: $data");
           if (data['fromUserId'] == widget.currentChatId) {
             setState(() {
               _isOtherUserTyping = false;
             });
+            print("🔵 CHAT_DEBUG: Setting typing indicator to false");
           }
         },
       );
@@ -49,6 +55,7 @@ class _MsgsWidgetState extends State<MsgsWidget> {
   Widget build(BuildContext context) {
     return Consumer<ChatViewModel>(
         builder: (context,chatVM,child) {
+          print("🔵 CHAT_DEBUG [UI]: MsgsWidget build - isLoading: ${chatVM.isLoading}, messages count: ${chatVM.messages.length}");
 
           return chatVM.isLoading?CustomLoader():Column(
             children: [

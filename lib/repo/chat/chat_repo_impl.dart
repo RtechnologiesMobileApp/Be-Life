@@ -10,10 +10,26 @@ class ChatRepoImpl implements ChatRepo{
   @override
   Future<List<ChatListModel>> fetchChatList({required String token}) async{
  try{
+  print("🔵 CHAT_DEBUG [API]: Calling fetchChatList with token: ${token.substring(0, 10)}...");
   final response= await apiService.getApi(url: ApiEndpoints.fetchChatList,token: token);
-  List<ChatListModel> chatList=(response['messages']as List).map((messages)=>ChatListModel.fromJson(messages)).toList();
+  print("🔵 CHAT_DEBUG [API]: fetchChatList response: $response");
+  
+  // Handle different response structures
+  List<dynamic> messagesList = [];
+  if (response['messages'] != null) {
+    messagesList = response['messages'] as List;
+  } else if (response['rooms'] != null) {
+    messagesList = response['rooms'] as List;
+  } else if (response['data'] != null) {
+    messagesList = response['data'] as List;
+  }
+  
+  print("🔵 CHAT_DEBUG [API]: Found ${messagesList.length} items in response");
+  List<ChatListModel> chatList = messagesList.map((messages) => ChatListModel.fromJson(messages)).toList();
+  print("🔵 CHAT_DEBUG [API]: Parsed ${chatList.length} chat list items");
  return chatList;
  }catch(e){
+   print("🔵 CHAT_DEBUG: API fetchChatList error: $e");
    rethrow;
  }
   }
@@ -21,10 +37,24 @@ class ChatRepoImpl implements ChatRepo{
   @override
   Future<List<MessageModel>> fetchChatMessages({required int id,required String token,required int page}) async{
     try{
-      final response= await apiService.getApi(url:"${ApiEndpoints.fetchChatMessages}/$id?page=$page",token: token);
-      List<MessageModel> messagesList=(response['messages']as List).map((messages)=>MessageModel.fromJson(messages)).toList();
-      return messagesList;
+  print("🔵 CHAT_DEBUG [API]: Calling fetchChatMessages for id: $id, page: $page");
+  final response= await apiService.getApi(url:"${ApiEndpoints.fetchChatMessages}/$id?page=$page",token: token);
+  print("🔵 CHAT_DEBUG [API]: fetchChatMessages response: $response");
+  
+  // Handle different response structures
+  List<dynamic> messagesList = [];
+  if (response['messages'] != null) {
+    messagesList = response['messages'] as List;
+  } else if (response['data'] != null) {
+    messagesList = response['data'] as List;
+  }
+  
+  print("🔵 CHAT_DEBUG [API]: Found ${messagesList.length} messages in response");
+  List<MessageModel> messagesListParsed = messagesList.map((messages) => MessageModel.fromJson(messages)).toList();
+  print("🔵 CHAT_DEBUG [API]: Parsed ${messagesListParsed.length} messages");
+      return messagesListParsed;
     }catch(e){
+      print("🔵 CHAT_DEBUG: API fetchChatMessages error: $e");
       rethrow;
     }
   }

@@ -89,13 +89,18 @@ ScrollController get scrollController=>_scrollController;
   }
 
   void listenReceiveMessage() {
+    print("🔵 CHAT_DEBUG: Setting up receive message listener");
     chatSocketService.onReceiveMessage((newMessage) {
+      print("🔵 CHAT_DEBUG: Received new message: $newMessage");
       try {
         final message = MessageModel.fromJson(newMessage);
+        print("🔵 CHAT_DEBUG: Parsed message successfully, adding to list");
         scrollToBottom();
         _messages.insert(0,message);
+        print("🔵 CHAT_DEBUG: Message added, total messages: ${_messages.length}");
         notifyListeners();
       } catch (e) {
+        print("🔵 CHAT_DEBUG: Error parsing received message: $e");
         log("Error parsing received message: $e");
       }
     });
@@ -125,66 +130,85 @@ ScrollController get scrollController=>_scrollController;
     }
   }
   Future<void> fetchMessages(int id)async{
+    print("🔵 CHAT_DEBUG [VIEWMODEL]: Starting fetchMessages for chatId: $id");
     _currentPage = 0;
     _hasMore = true;
     _messages.clear();
     setLoading(true);
     try{
     _messages.clear();
+    print("🔵 CHAT_DEBUG [VIEWMODEL]: Fetching messages from API for chatId: $id, page: $_currentPage");
     final fetchedMessages=  await chatRepo.fetchChatMessages(id: id, token: SessionController().token,page: _currentPage);
+    print("🔵 CHAT_DEBUG [VIEWMODEL]: API returned ${fetchedMessages.length} messages");
     _messages.addAll(fetchedMessages);
+    print("🔵 CHAT_DEBUG [VIEWMODEL]: Total messages in list: ${_messages.length}");
     
     // Emit open_chat event to join the chat room
+    print("🔵 CHAT_DEBUG [VIEWMODEL]: Emitting open_chat event for otherUserId: $id");
     chatSocketService.openChat(otherUserId: id);
     
     // Listen for chat history from socket
+    print("🔵 CHAT_DEBUG [VIEWMODEL]: Setting up chat_history listener");
     chatSocketService.onChatHistory((chatHistory) {
+      print("🔵 CHAT_DEBUG [VIEWMODEL]: Received chat history from socket: $chatHistory");
       // Handle chat history if needed
     });
     
     notifyListeners();
+    print("🔵 CHAT_DEBUG [VIEWMODEL]: fetchMessages completed successfully");
 
     }catch(e){
+      print("🔵 CHAT_DEBUG [VIEWMODEL]: Error in fetchMessages: ${e.toString()}");
       log(e.toString());
     }finally{
       setLoading(false);
+      print("🔵 CHAT_DEBUG [VIEWMODEL]: fetchMessages finished, loading set to false");
     }
   }
 
   void sendMessage(int receiverId){
+    print("🔵 CHAT_DEBUG [VIEWMODEL]: Sending message to receiverId: $receiverId, content: ${messageController.text}");
     MessageModel newMsg=MessageModel(senderId: SessionController().id!, receiverId: receiverId, content: messageController.text,);
     scrollToBottom();
 
     _messages.insert(0,newMsg);
+    print("🔵 CHAT_DEBUG [VIEWMODEL]: Message added to local list, total messages: ${_messages.length}");
     
     // Send message via socket with corrected parameters
+    print("🔵 CHAT_DEBUG [VIEWMODEL]: Emitting send_message event via socket");
     chatSocketService.sendMessage(receiverId: receiverId, content: messageController.text);
     
     // Listen for message sent confirmation
     chatSocketService.onMessageSent((sentMessage) {
+      print("🔵 CHAT_DEBUG [VIEWMODEL]: Message sent confirmation received: $sentMessage");
       // Update message status if needed
     });
     
     messageController.clear();
     notifyListeners();
+    print("🔵 CHAT_DEBUG [VIEWMODEL]: Send message completed");
   }
 
   // Mark messages as read when chat is visible
   void markAsRead(int otherUserId) {
+    print("🔵 CHAT_DEBUG [VIEWMODEL]: Marking messages as read for otherUserId: $otherUserId");
     chatSocketService.markMessagesAsRead(otherUserId: otherUserId);
   }
 
   // Handle typing indicators
   void startTyping(int toUserId) {
+    print("🔵 CHAT_DEBUG [VIEWMODEL]: Starting typing indicator for toUserId: $toUserId");
     chatSocketService.sendTyping(toUserId: toUserId);
   }
 
   void stopTyping(int toUserId) {
+    print("🔵 CHAT_DEBUG [VIEWMODEL]: Stopping typing indicator for toUserId: $toUserId");
     chatSocketService.stopTyping(toUserId: toUserId);
   }
 
   // Listen for typing indicators from other users
   void setupTypingListeners(Function(dynamic) onTyping, Function(dynamic) onStopTyping) {
+    print("🔵 CHAT_DEBUG [VIEWMODEL]: Setting up typing listeners");
     chatSocketService.onTyping(onTyping);
     chatSocketService.onStopTyping(onStopTyping);
   }

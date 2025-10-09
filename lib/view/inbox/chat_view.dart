@@ -22,10 +22,12 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    print("🔵 CHAT_DEBUG [UI]: ChatView initState for otherUserid: ${widget.otherUserid}");
     WidgetsBinding.instance.addObserver(this);
     
     // Mark messages as read when chat opens
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("🔵 CHAT_DEBUG [UI]: ChatView postFrameCallback - marking as read");
       final chatVM = Provider.of<ChatViewModel>(context, listen: false);
       chatVM.markAsRead(widget.otherUserid);
     });

@@ -34,7 +34,9 @@ class SocketService {
     );
 
     _socket.onConnect((_) {
+      print("🔵 CHAT_DEBUG [SOCKET]: Socket Connected: ${_socket.id}");
       debugPrint("✅ Socket Connected: ${_socket.id}");
+      print("🔵 CHAT_DEBUG [SOCKET]: Emitting join event with userId: $userId");
       _socket.emit("join", userId);
       
       // Set up global listeners immediately after connection
@@ -50,28 +52,40 @@ class SocketService {
   }
 
   void _setupGlobalListeners() {
+    print("🔵 CHAT_DEBUG [SOCKET]: Setting up global socket listeners");
+    
     // Listen for incoming messages
     _socket.on("receive_message", (data) {
+      print("🔵 CHAT_DEBUG [SOCKET]: Global receive_message listener triggered: $data");
       // Increase unread count only if user is not in Inbox tab
       try {
         final mainNav = getIt<MainNavViewModel>();
         if (mainNav.selectedIndex != 1) {
+          print("🔵 CHAT_DEBUG [SOCKET]: Incrementing unread count");
           mainNav.incrementUnread();
+        } else {
+          print("🔵 CHAT_DEBUG [SOCKET]: User is in inbox tab, not incrementing counter");
         }
       } catch (e) {
+        print("🔵 CHAT_DEBUG [SOCKET]: Error accessing MainNavViewModel: $e");
         debugPrint("Error accessing MainNavViewModel: $e");
       }
     });
 
     // Listen for new notifications
     _socket.on("new_notification", (data) {
+      print("🔵 CHAT_DEBUG [SOCKET]: Global new_notification listener triggered: $data");
       try {
         final mainNav = getIt<MainNavViewModel>();
         mainNav.incrementUnread();
+        print("🔵 CHAT_DEBUG [SOCKET]: Notification unread count incremented");
       } catch (e) {
+        print("🔵 CHAT_DEBUG [SOCKET]: Error accessing MainNavViewModel for notification: $e");
         debugPrint("Error accessing MainNavViewModel for notification: $e");
       }
     });
+    
+    print("🔵 CHAT_DEBUG [SOCKET]: Global listeners setup complete");
   }
 
   void dispose() {
