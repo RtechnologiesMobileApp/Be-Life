@@ -67,7 +67,20 @@ class AuthRepoImpl implements AuthRepo {
         data: payload,
       );
       log('[AuthRepoImpl.verifyOtp] Response: $response');
-      return response['verified'] == true;
+      // Accept multiple common response shapes
+      final verified = response['verified'];
+      if (verified is bool) return verified;
+      if (verified is String) {
+        final v = verified.toLowerCase();
+        if (v == 'true' || v == '1' || v == 'yes' || v == 'ok' || v == 'success') return true;
+      }
+      final success = response['success'];
+      if (success is bool && success) return true;
+      if (success is String && ['true','1','yes','ok','success'].contains(success.toLowerCase())) return true;
+      final status = response['status'];
+      if (status is bool && status) return true;
+      if (status is String && ['ok','success','verified','true','1','yes'].contains(status.toLowerCase())) return true;
+      return false;
     } catch (e) {
       log('[AuthRepoImpl.verifyOtp] Error: $e');
       rethrow;

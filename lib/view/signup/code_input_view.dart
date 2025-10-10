@@ -56,8 +56,13 @@ class CodeInputView extends StatelessWidget {
                       ),
                       controller: sVM.otpControllers[index],
                       onChanged: (value){
-                        if (value.isNotEmpty && index < 5) {
+                        // move focus only if not on the last field
+                        if (value.isNotEmpty && index < 4) {
                           FocusScope.of(context).nextFocus();
+                        }
+                        // optionally, handle backspace navigation
+                        if (value.isEmpty && index > 0) {
+                          // no-op here; default behavior keeps focus
                         }
                       },
                     ),
