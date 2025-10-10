@@ -17,6 +17,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:be_life_style/repo/video/video_repo.dart';
+import 'package:be_life_style/services/session_manager/session_controller.dart';
 
 class OtherUserProfileView extends StatefulWidget {
   final int userId;
@@ -294,9 +296,17 @@ class _OtherUserProfileContentState extends State<_OtherUserProfileContent> {
             ),
             Column(
               children: [
-                Text("${user.likesCount ?? "0"}",
-                    style: Theme.of(context).textTheme.bodyLarge!
-                        .copyWith(fontWeight: FontWeight.w700, color: Color(0xFF202020))),
+                FutureBuilder<int>(
+                  future: getIt<VideoRepo>()
+                      .fetchUserVideos(userId: user.id, token: SessionController().token)
+                      .then((videos) => videos.fold<int>(0, (sum, v) => sum + (v.likesCount ?? 0))),
+                  builder: (context, snapshot) {
+                    final likes = snapshot.data ?? user.likesCount ?? 0;
+                    return Text("$likes",
+                        style: Theme.of(context).textTheme.bodyLarge!
+                            .copyWith(fontWeight: FontWeight.w700, color: Color(0xFF202020)));
+                  },
+                ),
                 Text("Likes",
                     style: Theme.of(context).textTheme.bodyLarge!
                         .copyWith(fontSize: 14.sp, color: Color(0xFF202020))),

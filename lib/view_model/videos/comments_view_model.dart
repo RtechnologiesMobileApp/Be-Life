@@ -109,8 +109,8 @@ Future<void> addComment({required int id, required ProfileViewModel profileVM}) 
     commentController.clear();
     _safeNotifyListeners();
 
-    // 5️⃣ Refresh actual comments from backend
-    await fetchVideoComments(id);
+    // 5️⃣ Optional: defer server refresh to avoid losing the optimistic comment
+    // await fetchVideoComments(id);
   } catch (e) {
     log("addComment error: $e");
   } finally {

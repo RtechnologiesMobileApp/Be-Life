@@ -29,7 +29,7 @@ class _MyUploadedVideoPlayerScreenState
   void initState() {
     super.initState();
     _controller = VideoPlayerController.networkUrl(
-      Uri.parse(widget.videoData.videoUrl ?? ''),
+      Uri.parse(widget.videoData.videoUrl),
     )
       ..initialize().then((_) {
         if (mounted) {
@@ -94,7 +94,15 @@ class _MyUploadedVideoPlayerScreenState
                   right: 10,
                   bottom: 80,
                  // child: RightBar(videoData: widget.videoData,   viewModel: myVideosVM),
-                   child: RightBar(videoData: widget.videoData,  ),
+                   child: RightBar(
+                     videoData: widget.videoData,
+                     onToggleLike: (id) async {
+                       await context.read<MyVideosViewModel>().toggleLike(id);
+                     },
+                     onToggleBookmark: (id) async {
+                       await context.read<MyVideosViewModel>().toggleBookmark(id);
+                     },
+                   ),
                 ),
 
                 // 👈 Left Bar

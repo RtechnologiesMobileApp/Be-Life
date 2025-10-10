@@ -23,8 +23,15 @@ import 'package:share_plus/share_plus.dart';
 
 class RightBar extends StatefulWidget {
   final VideoModel videoData;
+  final Future<void> Function(int videoId)? onToggleLike;
+  final Future<void> Function(int videoId)? onToggleBookmark;
 
-  const RightBar({super.key, required this.videoData});
+  const RightBar({
+    super.key,
+    required this.videoData,
+    this.onToggleLike,
+    this.onToggleBookmark,
+  });
 
   @override
   State<RightBar> createState() => _RightBarState();
@@ -39,7 +46,7 @@ class _RightBarState extends State<RightBar> {
     super.initState();
     video = widget.videoData;
     _uploaderImageUrl = _resolveUploaderImageUrl(context);
-    if ((_uploaderImageUrl == null || _uploaderImageUrl!.isEmpty) && (video.postedBy != null)) {
+    if (((_uploaderImageUrl ?? '').isEmpty) && (video.postedBy != null)) {
       _fetchUploaderProfilePicture();
     }
   }
@@ -271,7 +278,11 @@ InkWell(
         toggleLikeLocal(); // ✅ Local instant update
 
         try {
-          await context.read<VideosViewModel>().toggleLike(video.id!);
+          if (widget.onToggleLike != null) {
+            await widget.onToggleLike!(video.id!);
+          } else {
+            await context.read<VideosViewModel>().toggleLike(video.id!);
+          }
         } catch (_) {
           try {
             await context.read<ExploreViewModel>().toggleLike(video.id!);
@@ -320,7 +331,11 @@ InkWell(
         toggleBookmarkLocal(); // ✅ Local instant update
 
         try {
-          await context.read<VideosViewModel>().toggleBookmark(video.id!);
+          if (widget.onToggleBookmark != null) {
+            await widget.onToggleBookmark!(video.id!);
+          } else {
+            await context.read<VideosViewModel>().toggleBookmark(video.id!);
+          }
         } catch (_) {
           try {
             await context.read<ExploreViewModel>().toggleBookmark(video.id!);
