@@ -30,6 +30,7 @@ abstract class VideoModel with _$VideoModel {
     required String videoResolution,
     required String videoRatio,
     required String PrivacyType,
+    @JsonKey(includeIfNull: false) String? place, //
     @BoolFromIntConverter() required bool isOriginalSound,
     @BoolFromIntConverter()  required bool ageRestricted,
     @JsonKey(includeIfNull: false) String? videoCaption,

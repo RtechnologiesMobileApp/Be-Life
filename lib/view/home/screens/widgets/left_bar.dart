@@ -27,10 +27,23 @@ class LeftBar extends StatelessWidget {
                 filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
                 child: Row( mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset(AppImages.locIcon,height: 12.h,width: 12.h,),
-                    SizedBox(width: 2.w,),
-                    Text(videoData.locationTag,style: Theme.of(context).textTheme.bodyMedium),
-                  ],
+  if (videoData.place != null && videoData.place!.isNotEmpty) ...[
+    SvgPicture.asset(AppImages.locIcon, height: 12.h, width: 12.h),
+    SizedBox(width: 2.w),
+    SizedBox(
+      width: 240.w,
+      child: Text(
+        videoData.place!,
+        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              fontSize: 13.sp,
+              color: Colors.white.withOpacity(0.85),
+            ),
+        overflow: TextOverflow.ellipsis,
+      ),
+    ),
+  ],
+],
+
                 ),
               ),
             ),
@@ -50,19 +63,7 @@ class LeftBar extends StatelessWidget {
           ),
           SizedBox(height: 6.h,),
 
-          // Container(
-          //     height: 21.h,
-          //     width: 102.w,
-          //     decoration: BoxDecoration(
-          //         color: Colors.white.withValues(alpha: 0.05),
-          //         borderRadius: BorderRadius.circular(100)
-          //     ),
-              // child: ClipRRect(
-              //   child: BackdropFilter(
-              //       filter: ImageFilter.blur(sigmaY: 25,sigmaX: 25),
-              //       child: Center(child: Text("Creator earns commission",style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 8.sp),))),
-              // )
-            //  ),
+         
           SizedBox(height: 16.h,),
 
         ],
@@ -70,3 +71,4 @@ class LeftBar extends StatelessWidget {
     );
   }
 }
+ 

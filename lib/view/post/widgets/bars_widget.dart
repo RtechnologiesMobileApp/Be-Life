@@ -67,6 +67,14 @@ Consumer<PostVideoViewModel>(
                         : Colors.black,
                   ),
             ),
+           SizedBox(width: 8.w),
+            Text(
+  viewModel.detectedPlace ?? "No specific place",
+  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+        color: Colors.grey,
+        fontSize: 12.sp,
+      ),
+),
           ],
         ),
       ),
