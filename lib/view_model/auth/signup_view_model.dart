@@ -41,6 +41,8 @@ class SignupViewModel with ChangeNotifier{
   bool _atLeast1Symbol=false;
   bool _obs=true;
   int _seconds = 119;
+  // OTP state
+  final List<TextEditingController> otpControllers = List.generate(6, (_) => TextEditingController());
   XFile? profilePic;
   Timer? _timer;
   List<String> get selectedInterest=>_selectedInterests;
@@ -59,9 +61,17 @@ class SignupViewModel with ChangeNotifier{
   DateTime get dob=>_dob;
   String? get countryCode=>_countryCode;
   int get seconds => _seconds;
+  bool get isOtpExpired => _seconds <= 0;
   @override
   void dispose() {
     passController.dispose();
+    emailController.dispose();
+    cPassController.dispose();
+    usernameController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    phoneNoController.dispose();
+    for (final c in otpControllers) { c.dispose(); }
     _timer?.cancel();
     super.dispose();
   }
@@ -83,22 +93,101 @@ class SignupViewModel with ChangeNotifier{
     notifyListeners();
   }
 
-  void startTimer() {
-    if (_timer != null && _timer!.isActive) return;
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+  void resetAndStartTimer({int seconds = 120}) {
+    _timer?.cancel();
+    _seconds = seconds;
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_seconds > 0) {
         _seconds--;
         notifyListeners();
       } else {
         timer.cancel();
+        notifyListeners();
       }
     });
+  }
+
+  void stopTimer() {
+    _timer?.cancel();
   }
 
   String get formattedTime {
     int minutes = _seconds ~/ 60;
     int remainingSeconds = _seconds % 60;
     return '$minutes:${remainingSeconds.toString().padLeft(2, '0')}';
+  }
+
+  String get enteredOtp => otpControllers.map((c) => c.text).join();
+
+  Future<void> requestOtp(BuildContext context) async {
+    validateForm();
+    if (emailError != null) {
+      FLushBarHelper.flushBarErrorMessage(emailError!, context, FlushbarPosition.TOP);
+      return;
+    }
+    setLoading(true);
+    try {
+      final email = emailController.text.trim();
+      log('[SignupViewModel.requestOtp] email=$email');
+      await authServices.sendOtp(email: email);
+      resetAndStartTimer(seconds: 120);
+      Navigator.pushNamed(context, RouteName.codeInputScreen);
+    } catch (e) {
+      log('[SignupViewModel.requestOtp] Error: $e');
+      FLushBarHelper.flushBarErrorMessage(e.toString(), context, FlushbarPosition.TOP);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  Future<void> resendOtp(BuildContext context) async {
+    if (!isOtpExpired) {
+      log('[SignupViewModel.resendOtp] blocked: timer not expired');
+      return; // prevent spamming before expiry
+    }
+    try {
+      final email = emailController.text.trim();
+      log('[SignupViewModel.resendOtp] email=$email');
+      await authServices.sendOtp(email: email);
+      resetAndStartTimer(seconds: 120);
+    } catch (e) {
+      log('[SignupViewModel.resendOtp] Error: $e');
+      FLushBarHelper.flushBarErrorMessage(e.toString(), context, FlushbarPosition.TOP);
+    }
+  }
+
+  Future<void> confirmOtpAndProceed(BuildContext context) async {
+    if (enteredOtp.length != 6) {
+      FLushBarHelper.flushBarErrorMessage("Enter 6 digit code", context, FlushbarPosition.TOP);
+      return;
+    }
+    if (isOtpExpired) {
+      FLushBarHelper.flushBarErrorMessage("Code expired. Resend to get a new one.", context, FlushbarPosition.TOP);
+      return;
+    }
+    setLoading(true);
+    try {
+      final email = emailController.text.trim();
+      final otp = enteredOtp;
+      log('[SignupViewModel.confirmOtpAndProceed] email=$email otp=$otp');
+      final ok = await authServices.verifyOtp(email: email, otp: otp);
+      if (ok) {
+        stopTimer();
+        if (context.mounted) {
+          Navigator.pushNamed(context, RouteName.nameInputScreen);
+        }
+      } else {
+        if (context.mounted) {
+          FLushBarHelper.flushBarErrorMessage("Invalid code", context, FlushbarPosition.TOP);
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        FLushBarHelper.flushBarErrorMessage(e.toString(), context, FlushbarPosition.TOP);
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
   final List<InterestModel> _interests=[

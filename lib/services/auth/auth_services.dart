@@ -73,4 +73,27 @@ class AuthServices {
       rethrow;
     }
   }
+
+  Future<void> sendOtp({required String email}) async {
+    try {
+      log('[AuthServices.sendOtp] email=$email');
+      await authRepo.sendOtp(email: email);
+      log('[AuthServices.sendOtp] OK');
+    } catch (e) {
+      log('[AuthServices.sendOtp] Error: $e');
+      rethrow;
+    }
+  }
+
+  Future<bool> verifyOtp({required String email, required String otp}) async {
+    try {
+      log('[AuthServices.verifyOtp] email=$email otp=$otp');
+      final ok = await authRepo.verifyOtp(email: email, otp: otp);
+      log('[AuthServices.verifyOtp] verified=$ok');
+      return ok;
+    } catch (e) {
+      log('[AuthServices.verifyOtp] Error: $e');
+      rethrow;
+    }
+  }
 }

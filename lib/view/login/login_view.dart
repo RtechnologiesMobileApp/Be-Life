@@ -87,7 +87,7 @@ class LoginView extends StatelessWidget {
                     //   ],
                     // ),
                       CustomButton(text: "Sign up", onPressed: (){
-             Navigator.pushNamed(context, RouteName.nameInputScreen);
+             Navigator.pushNamed(context, RouteName.emailInputScreen);
 
            },color: Colors.white.withValues(alpha: 0.84),textStyle:Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.black)),
 

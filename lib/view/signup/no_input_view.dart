@@ -32,7 +32,7 @@ class NoInputView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: kToolbarHeight + MediaQuery.of(context).padding.top),
-            CustomLinearProgressBar(value: 0.5),
+            CustomLinearProgressBar(value: 0.45),
             SizedBox(height: 24.h,),
             Align(alignment:Alignment.topLeft,child: Text("Enter your number",style: Theme.of(context).textTheme.headlineMedium,)),
             SizedBox(height: 32.h,),
@@ -57,8 +57,7 @@ class NoInputView extends StatelessWidget {
             CustomButton(text: "Continue", onPressed: (){
               sVM.validateForm();
               if(sVM.phoneNoError==null){
-              context.read<SignupViewModel>().startTimer();
-              Navigator.pushNamed(context, RouteName.codeInputScreen);}
+              Navigator.pushNamed(context, RouteName.passInputScreen);} 
               else{
                 FLushBarHelper.flushBarErrorMessage(sVM.phoneNoError!, context,FlushbarPosition.TOP);
 

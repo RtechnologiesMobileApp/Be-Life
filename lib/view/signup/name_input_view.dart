@@ -1,5 +1,5 @@
 import 'package:another_flushbar/flushbar.dart';
-import 'package:be_life_style/res/components/custom_loader.dart';
+// import 'package:be_life_style/res/components/custom_loader.dart';
 import 'package:be_life_style/utils/app_images.dart';
 import 'package:be_life_style/utils/flushbar_helper.dart';
 import 'package:be_life_style/view_model/auth/signup_view_model.dart';
@@ -70,7 +70,7 @@ class NameInputView extends StatelessWidget {
             onPressed: () {
               sVM.validateForm();
               if(sVM.firstNameError==null&&sVM.lastNameError==null){
-                Navigator.pushNamed(context, RouteName.emailInputScreen);
+                Navigator.pushNamed(context, RouteName.dobInputScreen);
               }
               else if(sVM.firstNameError!=null){
                 FLushBarHelper.flushBarErrorMessage(sVM.firstNameError!, context,FlushbarPosition.TOP);
