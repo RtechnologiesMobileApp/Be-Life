@@ -5,8 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class CommentTextField extends StatelessWidget {
-  const CommentTextField({super.key, required this.id});
+  const CommentTextField({super.key, required this.id, this.onCommentAdded});
   final int id;
+  final VoidCallback? onCommentAdded;
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +26,14 @@ class CommentTextField extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: cVM.commentController,
-              onSubmitted: (val) {
+              onSubmitted: (val) async {
                 // cVM.addComment(id: id);
-                cVM.addComment(
-  id: id,
-  profileVM: Provider.of<ProfileViewModel>(context, listen: false),
-);
+                await cVM.addComment(
+                  id: id,
+                  profileVM: Provider.of<ProfileViewModel>(context, listen: false),
+                );
+                FocusScope.of(context).unfocus();
+                onCommentAdded?.call();
               },
               cursorColor: Colors.black,
               style: TextStyle(
@@ -50,14 +53,16 @@ class CommentTextField extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: () {
+            onTap: () async {
               if (cVM.commentController.text.trim().isNotEmpty) {
                 // cVM.addComment(id: id);
-                cVM.addComment(
-  id: id,
-  profileVM: Provider.of<ProfileViewModel>(context, listen: false),
-);
+                await cVM.addComment(
+                  id: id,
+                  profileVM: Provider.of<ProfileViewModel>(context, listen: false),
+                );
                  cVM.commentController.clear();
+                 FocusScope.of(context).unfocus();
+                 onCommentAdded?.call();
               }
             },
             child: Padding(

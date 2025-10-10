@@ -10,8 +10,9 @@ import 'comment_box.dart';
 import 'comment_text_field.dart';
 
 class CommentBottomSheet extends StatelessWidget {
-  const CommentBottomSheet({super.key,required this.id});
+  const CommentBottomSheet({super.key,required this.id, this.onCommentAdded});
  final int id;
+ final VoidCallback? onCommentAdded;
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -55,7 +56,7 @@ class CommentBottomSheet extends StatelessWidget {
              );
            }
          ),
-          CommentTextField(id: id),
+         CommentTextField(id: id, onCommentAdded: onCommentAdded),
         ],),
       ),
     );

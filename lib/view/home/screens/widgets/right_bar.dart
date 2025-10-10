@@ -3,12 +3,14 @@ import 'package:be_life_style/config/routes/route_names.dart';
 import 'package:be_life_style/model/video_model/video_model.dart';
 import 'package:be_life_style/utils/app_images.dart';
 import 'package:be_life_style/view/home/screens/widgets/comment_bottom_sheet.dart';
-import 'package:be_life_style/view/home/screens/widgets/share_bottom_sheet.dart';
 import 'package:be_life_style/view_model/explore_view_model.dart';
 import 'package:be_life_style/view_model/profile/profile_view_model.dart';
 import 'package:be_life_style/view_model/videos/for_you_view_model.dart';
 import 'package:be_life_style/view_model/videos/liked_videos_view_model.dart';
 import 'package:be_life_style/view_model/videos/my_videos_view_model.dart';
+import 'package:be_life_style/config/locator.dart';
+import 'package:be_life_style/repo/user/user_repo.dart';
+import 'package:be_life_style/services/session_manager/session_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,11 +32,66 @@ class RightBar extends StatefulWidget {
 
 class _RightBarState extends State<RightBar> {
   late VideoModel video;
+  String? _uploaderImageUrl;
 
   @override
   void initState() {
     super.initState();
     video = widget.videoData;
+    _uploaderImageUrl = _resolveUploaderImageUrl(context);
+    if ((_uploaderImageUrl == null || _uploaderImageUrl!.isEmpty) && (video.postedBy != null)) {
+      _fetchUploaderProfilePicture();
+    }
+  }
+
+  String _resolveUploaderImageUrl(BuildContext context) {
+    String? url = video.uploaderProfilePicture;
+
+    // Fallback to current user's profile picture if this is their upload
+    if (url == null || url.isEmpty) {
+      try {
+        final profileVM = context.read<ProfileViewModel>();
+        final currentUserId = profileVM.userDetails?.id;
+        if (currentUserId != null && video.postedBy == currentUserId) {
+          url = profileVM.userDetails?.profilePicture;
+        }
+      } catch (_) {}
+    }
+
+    // Prefix BASE_URL if backend returned a relative path
+    if (url != null && url.isNotEmpty && !url.startsWith('http')) {
+      final base = dotenv.env['BASE_URL'] ?? '';
+      if (base.isNotEmpty) {
+        if (url.startsWith('/')) return '$base$url';
+        return '$base/$url';
+      }
+    }
+
+    return url ?? '';
+  }
+
+  Future<void> _fetchUploaderProfilePicture() async {
+    try {
+      final userRepo = getIt<UserRepo>();
+      final other = await userRepo.getOtherUserProfile(
+        video.postedBy!,
+        SessionController().token,
+      );
+      String? pic = other.profilePicture;
+      if (pic != null && pic.isNotEmpty && !pic.startsWith('http')) {
+        final base = dotenv.env['BASE_URL'] ?? '';
+        if (base.isNotEmpty) {
+          pic = pic.startsWith('/') ? '$base$pic' : '$base/$pic';
+        }
+      }
+      if (mounted && (pic != null && pic.isNotEmpty)) {
+        setState(() {
+          _uploaderImageUrl = pic;
+        });
+      }
+    } catch (_) {
+      // ignore fallback errors
+    }
   }
 
   void toggleLikeLocal() {
@@ -85,7 +142,9 @@ class _RightBarState extends State<RightBar> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(1000),
                 child: CachedNetworkImage(
-                  imageUrl: video.uploaderProfilePicture ?? "",
+                  imageUrl: (_uploaderImageUrl?.isNotEmpty ?? false)
+                      ? _uploaderImageUrl!
+                      : _resolveUploaderImageUrl(context),
                   fit: BoxFit.cover,
                   placeholder: (_, __) =>
                       const CupertinoActivityIndicator(color: Colors.white),
@@ -113,7 +172,16 @@ class _RightBarState extends State<RightBar> {
                     shape: const RoundedRectangleBorder(),
                     backgroundColor: Colors.white.withValues(alpha: 0.98),
                     context: context,
-                    builder: (_) => CommentBottomSheet(id: video.id!),
+                    builder: (_) => CommentBottomSheet(
+                      id: video.id!,
+                      onCommentAdded: () {
+                        setState(() {
+                          video = video.copyWith(
+                            commentsCount: (video.commentsCount ?? 0) + 1,
+                          );
+                        });
+                      },
+                    ),
                   );
                 },
                 child: SizedBox(

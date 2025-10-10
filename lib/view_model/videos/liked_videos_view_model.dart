@@ -125,10 +125,18 @@ class LikedVideosViewModel with ChangeNotifier {
   List<VideoModel> get likedVideos => _likedVideos;
 
   bool _hasFetched = false;
+  bool _isDisposed = false;
+
+  void _safeNotifyListeners(){
+    if(!_isDisposed){
+      notifyListeners();
+    }
+  }
 
   void setLoading(bool val) {
+    if(_isDisposed) return;
     _isLoading = val;
-    notifyListeners();
+    _safeNotifyListeners();
   }
 
   // ✅ Fetch current user's liked videos
@@ -143,10 +151,11 @@ class LikedVideosViewModel with ChangeNotifier {
         id: SessionController().id!,
         token: SessionController().token,
       );
+      if(_isDisposed) return;
       _likedVideos
         ..clear()
         ..addAll(fetchedVideos);
-      notifyListeners();
+      _safeNotifyListeners();
     } catch (e) {
       log("❌ Error fetching current user liked videos: $e");
     } finally {
@@ -165,10 +174,11 @@ class LikedVideosViewModel with ChangeNotifier {
         userId: userId,
         token: SessionController().token,
       );
+      if(_isDisposed) return;
       _likedVideos
         ..clear()
         ..addAll(fetchedVideos);
-      notifyListeners();
+      _safeNotifyListeners();
     } catch (e) {
       log("❌ Error fetching user liked videos: $e");
     } finally {
@@ -189,11 +199,12 @@ class LikedVideosViewModel with ChangeNotifier {
           : (current.likesCount ?? 0) - 1;
 
       // 🔹 Optimistic UI update
+      if(_isDisposed) return;
       _likedVideos[index] = current.copyWith(
         isLiked: newIsLiked,
         likesCount: newLikesCount,
       );
-      notifyListeners();
+      _safeNotifyListeners();
 
       // 🔹 API call to backend
       await videosRepo.likeVideo(
@@ -215,8 +226,9 @@ class LikedVideosViewModel with ChangeNotifier {
       final newIsSaved = !(current.isSaved ?? false);
 
       // 🔹 Optimistic UI update
+      if(_isDisposed) return;
       _likedVideos[index] = current.copyWith(isSaved: newIsSaved);
-      notifyListeners();
+      _safeNotifyListeners();
 
       // 🔹 API call to backend
       await videosRepo.bookMarkVideo(
@@ -231,6 +243,7 @@ class LikedVideosViewModel with ChangeNotifier {
   @override
   void dispose() {
     debugPrint("LikedVideosViewModel disposed");
+    _isDisposed = true;
     super.dispose();
   }
 }

@@ -13,22 +13,39 @@ final commentController=TextEditingController();
 final CommentsRepo commentsRepo;
   bool _isLoading=false;
   bool get isLoading=>_isLoading;
+  bool _isDisposed = false;
+
+  void _safeNotifyListeners(){
+    if(!_isDisposed){
+      notifyListeners();
+    }
+  }
+
+  @override
+  void dispose(){
+    _isDisposed = true;
+    try{ commentController.dispose(); }catch(_){ }
+    super.dispose();
+  }
 
  final List<CommentResponseModel> _commentList=[];
  List<CommentResponseModel> get commentList=>_commentList;
 
   void setLoading(bool val){
+    if(_isDisposed) return;
     _isLoading=val;
-    notifyListeners();
+    _safeNotifyListeners();
   }
 
   Future<void> fetchVideoComments(int id)async{
    if(!_isLoading) setLoading(true);
 try{
+  if(_isDisposed) return;
   commentList.clear();
- final comments= await commentsRepo.fetchComments(id: id, token: SessionController().token);
+  final comments= await commentsRepo.fetchComments(id: id, token: SessionController().token);
+  if(_isDisposed) return;
   _commentList.addAll(comments);
-  notifyListeners();
+  _safeNotifyListeners();
 }catch(e){
   log(e.toString());
 }finally{
@@ -39,9 +56,9 @@ setLoading(false);
     int index = _commentList.indexWhere((comment) => comment.id == commentId);
     if (index != -1) {
       _commentList[index] = _commentList[index].copyWith(likesCount:_commentList[index].isLiked==false? _commentList[index].likesCount+1:_commentList[index].likesCount-1,isLiked: !_commentList[index].isLiked!);
-      notifyListeners();
+      _safeNotifyListeners();
     }
-    notifyListeners();
+    _safeNotifyListeners();
   }
   Future<void> toggleComment(int id)async{
 
@@ -87,12 +104,13 @@ Future<void> addComment({required int id, required ProfileViewModel profileVM}) 
     );
 
     // 4️⃣ Add to list instantly
+    if(_isDisposed) return;
     _commentList.insert(0, newComment);
     commentController.clear();
-    notifyListeners();
+    _safeNotifyListeners();
 
     // 5️⃣ Refresh actual comments from backend
-    fetchVideoComments(id);
+    await fetchVideoComments(id);
   } catch (e) {
     log("addComment error: $e");
   } finally {
