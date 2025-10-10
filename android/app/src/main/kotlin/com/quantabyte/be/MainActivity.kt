@@ -1,4 +1,4 @@
-package com.example.be_life_style
+package com.quantabyte.be
 
 import io.flutter.embedding.android.FlutterActivity
 
