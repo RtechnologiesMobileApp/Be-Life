@@ -30,6 +30,7 @@ class PostVideoViewModel with ChangeNotifier{
   XFile? _customThumbnail;
   XFile ? get customThumbnail=>_customThumbnail;
    String? currentLocation;
+  String? placeName; // reverse-geocoded place name
 final captionController=TextEditingController();
 bool _visibility=true;
 bool get visibility =>_visibility;
@@ -102,6 +103,13 @@ List<OtherUserModel> get taggedUsers => _taggedUsers;
       if (placemarks.isNotEmpty) {
         final p = placemarks.first;
         currentLocation = "${p.locality}, ${p.country}";
+        // Prefer a human-friendly place: name > subLocality > street > locality
+        placeName = p.name?.isNotEmpty == true
+            ? p.name
+            : (p.subLocality?.isNotEmpty == true
+                ? p.subLocality
+                : (p.street?.isNotEmpty == true ? p.street : p.locality));
+        log("[PostVideoViewModel] Reverse geocoded currentLocation=$currentLocation placeName=$placeName");
         notifyListeners();
       }
     } catch (e) {
@@ -202,7 +210,12 @@ if (videoUrl != null && _thumbnailUrl != null) {
   );
 
   debugPrint("🎯 Video Location: $locationTag");
-  await videoRepo.publishVideo(videoDetails: videoDetails, token: SessionController().token);
+  log('[PostVideoViewModel] Preparing upload with placeName=$placeName, locationTag=$locationTag');
+  await videoRepo.publishVideo(
+    videoDetails: videoDetails,
+    token: SessionController().token,
+   
+  );
 }
 
     // final meta = await getVideoMetaData(_pickedVideo!);
