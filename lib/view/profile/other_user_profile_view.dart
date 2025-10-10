@@ -1,5 +1,3 @@
- 
-
 import 'package:be_life_style/config/locator.dart';
 import 'package:be_life_style/config/routes/route_names.dart';
 import 'package:be_life_style/model/user_model/other_user_model.dart';
@@ -22,7 +20,7 @@ import 'package:be_life_style/services/session_manager/session_controller.dart';
 
 class OtherUserProfileView extends StatefulWidget {
   final int userId;
-  
+
   const OtherUserProfileView({super.key, required this.userId});
 
   @override
@@ -41,11 +39,12 @@ class _OtherUserProfileViewState extends State<OtherUserProfileView> {
 
 class _OtherUserProfileContent extends StatefulWidget {
   final int userId;
-  
+
   const _OtherUserProfileContent({required this.userId});
 
   @override
-  State<_OtherUserProfileContent> createState() => _OtherUserProfileContentState();
+  State<_OtherUserProfileContent> createState() =>
+      _OtherUserProfileContentState();
 }
 
 class _OtherUserProfileContentState extends State<_OtherUserProfileContent> {
@@ -109,9 +108,9 @@ class _OtherUserProfileContentState extends State<_OtherUserProfileContent> {
             body: Center(
               child: Text(
                 'User not found',
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: Colors.grey,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium!.copyWith(color: Colors.grey),
               ),
             ),
           );
@@ -122,9 +121,12 @@ class _OtherUserProfileContentState extends State<_OtherUserProfileContent> {
     );
   }
 
-  Widget _buildProfileContent(BuildContext context, OtherUserProfileViewModel viewModel) {
+  Widget _buildProfileContent(
+    BuildContext context,
+    OtherUserProfileViewModel viewModel,
+  ) {
     final user = viewModel.userProfile!;
-    
+
     return Scaffold(
       body: SafeArea(
         child: NestedScrollView(
@@ -132,7 +134,10 @@ class _OtherUserProfileContentState extends State<_OtherUserProfileContent> {
             return [
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 12.h,
+                  ),
                   child: Column(
                     children: [
                       _buildTopBar(),
@@ -143,9 +148,24 @@ class _OtherUserProfileContentState extends State<_OtherUserProfileContent> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Flexible(child: _buildCustomTab(icon: AppImages.gridIcon, index: 0)),
-                          Flexible(child: _buildCustomTab(icon: AppImages.heartOutline, index: 1)),
-                          Flexible(child: _buildCustomTab(icon: AppImages.bookmarkOutline, index: 2)),
+                          Flexible(
+                            child: _buildCustomTab(
+                              icon: AppImages.gridIcon,
+                              index: 0,
+                            ),
+                          ),
+                          Flexible(
+                            child: _buildCustomTab(
+                              icon: AppImages.heartOutline,
+                              index: 1,
+                            ),
+                          ),
+                          Flexible(
+                            child: _buildCustomTab(
+                              icon: AppImages.bookmarkOutline,
+                              index: 2,
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -181,9 +201,13 @@ class _OtherUserProfileContentState extends State<_OtherUserProfileContent> {
           onPressed: () => Navigator.pop(context),
           icon: Icon(Icons.arrow_back_ios, color: Colors.black, size: 24.h),
         ),
-        Text("Profile",
-            style: Theme.of(context).textTheme.headlineMedium!
-                .copyWith(fontSize: 18.sp, color: Colors.black)),
+        Text(
+          "Profile",
+          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+            fontSize: 18.sp,
+            color: Colors.black,
+          ),
+        ),
         IconButton(
           onPressed: () {},
           icon: Icon(Icons.more_horiz, color: Colors.black, size: 24.h),
@@ -192,7 +216,10 @@ class _OtherUserProfileContentState extends State<_OtherUserProfileContent> {
     );
   }
 
-  Widget _buildProfileHeader(OtherUserModel user, OtherUserProfileViewModel viewModel) {
+  Widget _buildProfileHeader(
+    OtherUserModel user,
+    OtherUserProfileViewModel viewModel,
+  ) {
     return Column(
       children: [
         Row(
@@ -213,19 +240,20 @@ class _OtherUserProfileContentState extends State<_OtherUserProfileContent> {
                       child: CachedNetworkImage(
                         fit: BoxFit.cover,
                         imageUrl: user.profilePicture,
-                        progressIndicatorBuilder: (context, url, downloadProgress) =>
-                            Shimmer.fromColors(
-                              baseColor: Colors.grey.shade300,
-                              highlightColor: Colors.grey.shade100,
-                              child: Container(
-                                height: 110.h,
-                                width: 110.w,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) =>
+                                Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    height: 110.h,
+                                    width: 110.w,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
                         errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
                     ),
@@ -234,22 +262,31 @@ class _OtherUserProfileContentState extends State<_OtherUserProfileContent> {
               ),
             ),
             Container(
-                height: 34.h,
-                width: 34.w,
-                padding: EdgeInsets.only(right: 19.w),
-                child: Icon(CupertinoIcons.gift)),
+              height: 34.h,
+              width: 34.w,
+              padding: EdgeInsets.only(right: 19.w),
+              child: Icon(CupertinoIcons.gift),
+            ),
           ],
         ),
         SizedBox(height: 24.h),
 
         // Username & Bio
-        Text(user.firstName + user.lastName,
-            style: Theme.of(context).textTheme.headlineMedium!
-                .copyWith(color: Colors.black, fontSize: 24.sp)),
+        Text(
+          user.firstName + user.lastName,
+          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+            color: Colors.black,
+            fontSize: 24.sp,
+          ),
+        ),
         SizedBox(height: 4.h),
-        Text("@${user.username}",
-            style: Theme.of(context).textTheme.bodyMedium!
-                .copyWith(color: Color(0xFF202020), fontSize: 14.sp)),
+        Text(
+          "@${user.username}",
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+            color: Color(0xFF202020),
+            fontSize: 14.sp,
+          ),
+        ),
         SizedBox(height: 12.h),
 
         // Stats Section
@@ -266,12 +303,20 @@ class _OtherUserProfileContentState extends State<_OtherUserProfileContent> {
               },
               child: Column(
                 children: [
-                  Text("${user.followingCount ?? "0"}",
-                      style: Theme.of(context).textTheme.bodyLarge!
-                          .copyWith(fontWeight: FontWeight.w700, color: Color(0xFF202020))),
-                  Text("Following",
-                      style: Theme.of(context).textTheme.bodyLarge!
-                          .copyWith(fontSize: 14.sp, color: Color(0xFF202020))),
+                  Text(
+                    "${user.followingCount ?? "0"}",
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF202020),
+                    ),
+                  ),
+                  Text(
+                    "Following",
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontSize: 14.sp,
+                      color: Color(0xFF202020),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -285,12 +330,20 @@ class _OtherUserProfileContentState extends State<_OtherUserProfileContent> {
               },
               child: Column(
                 children: [
-                  Text("${user.followersCount ?? "0"}",
-                      style: Theme.of(context).textTheme.bodyLarge!
-                          .copyWith(fontWeight: FontWeight.w700, color: Color(0xFF202020))),
-                  Text("Followers",
-                      style: Theme.of(context).textTheme.bodyLarge!
-                          .copyWith(fontSize: 14.sp, color: Color(0xFF202020))),
+                  Text(
+                    "${user.followersCount ?? "0"}",
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF202020),
+                    ),
+                  ),
+                  Text(
+                    "Followers",
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontSize: 14.sp,
+                      color: Color(0xFF202020),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -298,18 +351,34 @@ class _OtherUserProfileContentState extends State<_OtherUserProfileContent> {
               children: [
                 FutureBuilder<int>(
                   future: getIt<VideoRepo>()
-                      .fetchUserVideos(userId: user.id, token: SessionController().token)
-                      .then((videos) => videos.fold<int>(0, (sum, v) => sum + (v.likesCount ?? 0))),
+                      .fetchUserVideos(
+                        userId: user.id,
+                        token: SessionController().token,
+                      )
+                      .then(
+                        (videos) => videos.fold<int>(
+                          0,
+                          (sum, v) => sum + (v.likesCount ?? 0),
+                        ),
+                      ),
                   builder: (context, snapshot) {
                     final likes = snapshot.data ?? user.likesCount ?? 0;
-                    return Text("$likes",
-                        style: Theme.of(context).textTheme.bodyLarge!
-                            .copyWith(fontWeight: FontWeight.w700, color: Color(0xFF202020)));
+                    return Text(
+                      "$likes",
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF202020),
+                      ),
+                    );
                   },
                 ),
-                Text("Likes",
-                    style: Theme.of(context).textTheme.bodyLarge!
-                        .copyWith(fontSize: 14.sp, color: Color(0xFF202020))),
+                Text(
+                  "Likes",
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    fontSize: 14.sp,
+                    color: Color(0xFF202020),
+                  ),
+                ),
               ],
             ),
           ],
@@ -317,17 +386,17 @@ class _OtherUserProfileContentState extends State<_OtherUserProfileContent> {
         SizedBox(height: 12.h),
 
         // Bio
-  Text(
-  textAlign: TextAlign.center,
-  (user.bio?.trim().isNotEmpty ?? false)
-      ? user.bio!.trim()
-      : "No bio added",
-  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-        fontSize: 14.sp,
-        color: const Color(0xFF202020),
-        letterSpacing: 0.3,
-      ),
-),
+        Text(
+          textAlign: TextAlign.center,
+          (user.bio?.trim().isNotEmpty ?? false)
+              ? user.bio!.trim()
+              : "No bio added",
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+            fontSize: 14.sp,
+            color: const Color(0xFF202020),
+            letterSpacing: 0.3,
+          ),
+        ),
 
         // Text(
         //   textAlign: TextAlign.center,
@@ -340,15 +409,19 @@ class _OtherUserProfileContentState extends State<_OtherUserProfileContent> {
     );
   }
 
-  Widget _buildProfileBtns(OtherUserModel user, OtherUserProfileViewModel viewModel) {
+  Widget _buildProfileBtns(
+    OtherUserModel user,
+    OtherUserProfileViewModel viewModel,
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
           child: CustomButton(
-            text: viewModel.isFollowLoading 
-              ? "Loading..." 
-              : (user.isFollowing ? "Unfollow" : "Follow"),
+            text:
+                viewModel.isFollowLoading
+                    ? "Loading..."
+                    : (user.isFollowing ? "Unfollow" : "Follow"),
             onPressed: () {
               if (!viewModel.isFollowLoading) {
                 if (user.isFollowing) {
@@ -362,31 +435,39 @@ class _OtherUserProfileContentState extends State<_OtherUserProfileContent> {
             width: 199.w,
             color: user.isFollowing ? Colors.grey.shade300 : Colors.blue,
             textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              color: user.isFollowing ? Colors.grey.shade700 : Colors.white, 
-              fontSize: 14.sp, 
-              letterSpacing: -0.3
+              color: user.isFollowing ? Colors.grey.shade700 : Colors.white,
+              fontSize: 14.sp,
+              letterSpacing: -0.3,
             ),
           ),
         ),
         SizedBox(width: 8.w),
-        Flexible(
-          child: CustomButton(
-            text: "Message",
-            onPressed: () {
-              // Navigate to chat with this user
-              Navigator.pushNamed(context, RouteName.chatScreen, arguments: {
-                'otherUserId': user.id,
-                'name': '${user.firstName} ${user.lastName}',
-                'img': user.profilePicture,
-              });
-            },
-            height: 42.h,
-            width: 159.w,
-            color: Color(0xFFF6F6F6),
-            textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                color: Color(0xFF202020), fontSize: 14.sp, letterSpacing: -0.3),
+        if (user.isFollowing)
+          Flexible(
+            child: CustomButton(
+              text: "Message",
+              onPressed: () {
+                // Navigate to chat with this user
+                Navigator.pushNamed(
+                  context,
+                  RouteName.chatScreen,
+                  arguments: {
+                    'otherUserId': user.id,
+                    'name': '${user.firstName} ${user.lastName}',
+                    'img': user.profilePicture,
+                  },
+                );
+              },
+              height: 42.h,
+              width: 159.w,
+              color: Color(0xFFF6F6F6),
+              textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                color: Color(0xFF202020),
+                fontSize: 14.sp,
+                letterSpacing: -0.3,
+              ),
+            ),
           ),
-        ),
       ],
     );
   }
