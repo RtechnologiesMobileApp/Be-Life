@@ -16,12 +16,12 @@ class TopBar extends StatelessWidget {
                 .copyWith(fontSize: 18.sp, color: Colors.black)),
         InkWell(
           onTap: (){
-               Navigator.pushNamed(context, RouteName.settingsScreen);
-            // showModalBottomSheet(
-            //   showDragHandle: true,
-            //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-            //     backgroundColor: Colors.white.withValues(alpha: 0.98),
-            //     context: context, builder: (context)=>SettingsBottomSheet());
+           //    Navigator.pushNamed(context, RouteName.settingsScreen);
+            showModalBottomSheet(
+              showDragHandle: true,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                backgroundColor: Colors.white.withValues(alpha: 0.98),
+                context: context, builder: (context)=>SettingsBottomSheet());
 
           },
           child: SizedBox(

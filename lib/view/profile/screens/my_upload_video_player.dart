@@ -52,6 +52,7 @@ class _MyUploadedVideoPlayerScreenState
 
   @override
   Widget build(BuildContext context) {
+     print('Uploader Name: ${widget.videoData.uploaderName}');
     return ChangeNotifierProvider(
       create: (_) => MyVideosViewModel(videosRepo: getIt<VideoRepo>()
       ),
@@ -107,11 +108,13 @@ class _MyUploadedVideoPlayerScreenState
 
                 // 👈 Left Bar
                 Positioned(
+                  
                   left: 0,
                   bottom: 16,
                   child: LeftBar(videoData: widget.videoData),
                 ),
 
+           
                 // ⬅️ Back Button
                 Positioned(
                   left: 16,

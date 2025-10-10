@@ -67,6 +67,14 @@ Consumer<PostVideoViewModel>(
                         : Colors.black,
                   ),
             ),
+           SizedBox(width: 8.w),
+            Text(
+  viewModel.detectedPlace ?? "No specific place",
+  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+        color: Colors.grey,
+        fontSize: 12.sp,
+      ),
+),
           ],
         ),
       ),
@@ -74,46 +82,7 @@ Consumer<PostVideoViewModel>(
   },
 ),
 
-        // CustomBar(
-        //   leading: SvgPicture.asset(
-        //     AppImages.locIcon,
-        //     height: 20.h,
-        //     width: 20.h,
-        //     fit: BoxFit.cover,
-        //     color: Colors.black,
-        //   ),
-        //   title: "Location",
-        //   trailing: Icon(
-        //     Icons.arrow_forward_ios,
-        //     size: 18.h,
-        //     color: Color(0xFF696969),
-        //   ),
-        //   subTitle: Container(
-        //     decoration: BoxDecoration(
-        //       borderRadius: BorderRadius.circular(8),
-        //       color: Color(0xFFF6F6F6),
-        //     ),
-        //     height: 28.h,
-        //     margin: EdgeInsets.only(top: 12.h),
-        //     padding: EdgeInsets.symmetric(horizontal: 8.w),
-        //     // ✅ Empty placeholder (for future dynamic location)
-        //     child: Row(
-        //       mainAxisSize: MainAxisSize.min,
-        //       children: [
-        //         Icon(Icons.location_on_outlined, color: Color(0xFFB0B0B0), size: 16),
-        //         SizedBox(width: 4.w),
-        //         Text(
-        //           "Add location",
-        //           style: Theme.of(context)
-        //               .textTheme
-        //               .bodyLarge!
-        //               .copyWith(fontSize: 14.sp, color: Color(0xFFB0B0B0)),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
-
+      
         // ✅ Visibility
         CustomBar(
           leading: Icon(Icons.remove_red_eye_outlined),

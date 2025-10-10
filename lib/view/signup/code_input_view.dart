@@ -3,7 +3,7 @@ import 'package:be_life_style/view_model/auth/signup_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import '../../config/routes/route_names.dart';
+// import '../../config/routes/route_names.dart';
 import '../../res/components/background.dart';
 import '../../res/components/custom_app_bar.dart';
 import '../../res/components/custom_btn.dart';
@@ -14,7 +14,7 @@ class CodeInputView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    final sVM = context.read<SignupViewModel>();
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(
@@ -27,13 +27,13 @@ class CodeInputView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: kToolbarHeight + MediaQuery.of(context).padding.top),
-            CustomLinearProgressBar(value: 0.625),
+            CustomLinearProgressBar(value: 0.2),
             SizedBox(height: 24.h,),
-            Align(alignment:Alignment.topLeft,child: Text("6 digit code",style: Theme.of(context).textTheme.headlineMedium,)),
+            Align(alignment:Alignment.topLeft,child: Text("5 digit code",style: Theme.of(context).textTheme.headlineMedium,)),
             SizedBox(height: 32.h,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(6, (index) {
+              children: List.generate(5, (index) {
                 return Flexible(
                   child: Container(
                     width: 50,
@@ -54,7 +54,17 @@ class CodeInputView extends StatelessWidget {
                         counterText: '', // Hide counter
                         border: InputBorder.none,
                       ),
-                      onChanged: (value){},
+                      controller: sVM.otpControllers[index],
+                      onChanged: (value){
+                        // move focus only if not on the last field
+                        if (value.isNotEmpty && index < 4) {
+                          FocusScope.of(context).nextFocus();
+                        }
+                        // optionally, handle backspace navigation
+                        if (value.isEmpty && index > 0) {
+                          // no-op here; default behavior keeps focus
+                        }
+                      },
                     ),
                   ),
                 );
@@ -67,9 +77,12 @@ class CodeInputView extends StatelessWidget {
                     text: 'Having trouble? ',
                     style:Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white.withValues(alpha: 0.84),height: 1.4),
                     children: [
-                      TextSpan(
-                        text: 'Resend now ',
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w600,height: 1.4),  ),
+                      WidgetSpan(
+                        child: GestureDetector(
+                          onTap: (){ sVM.resendOtp(context); },
+                          child: Text('Resend now ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w600,height: 1.4)),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -84,10 +97,17 @@ class CodeInputView extends StatelessWidget {
             SizedBox(height: 24.h,),
             Text("By entering, you agree to our Privacy policy & terms of conditions",style: Theme.of(context).textTheme.bodyLarge!.copyWith(height: 1.4,letterSpacing: 0.2)),
             const Spacer(),
-            CustomButton(text: "Continue", onPressed: (){
-              Navigator.pushNamed(context, RouteName.passInputScreen);
-
-            },color: Colors.white.withValues(alpha: 0.84,),textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.black,),),
+            Selector<SignupViewModel,bool>(
+              selector: (_, vm) => vm.isLoading,
+              builder: (_, loading, __) {
+                return CustomButton(
+                  text: loading ? 'Verifying...' : 'Continue',
+                  onPressed: () { if (!loading) sVM.confirmOtpAndProceed(context); },
+                  color: Colors.white.withValues(alpha: 0.84,),
+                  textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.black,),
+                );
+              },
+            ),
             SizedBox(height: 32.h),
           ],),)),
     );

@@ -4,6 +4,7 @@ class AppImages{
   static const appleIcon="assets/icons/Apple.svg";
   static const googleIcon="assets/icons/Google.svg";
   static const emailIcon="assets/icons/mail-line.svg";
+   static const eamilIconblack="assets/icons/emailblack.jpeg";
   static const passIcon="assets/icons/lock-line.svg";
   static const eyeOffIcon="assets/icons/eye-off-line.svg";
   static const userIcon="assets/icons/user-line.svg";

@@ -29,6 +29,7 @@ _VideoModel _$VideoModelFromJson(Map<String, dynamic> json) => _VideoModel(
   videoResolution: json['videoResolution'] as String,
   videoRatio: json['videoRatio'] as String,
   PrivacyType: json['PrivacyType'] as String,
+  place: json['place'] as String?,
   isOriginalSound: const BoolFromIntConverter().fromJson(
     json['isOriginalSound'],
   ),
@@ -67,6 +68,7 @@ Map<String, dynamic> _$VideoModelToJson(
   'videoResolution': instance.videoResolution,
   'videoRatio': instance.videoRatio,
   'PrivacyType': instance.PrivacyType,
+  if (instance.place case final value?) 'place': value,
   'isOriginalSound': const BoolFromIntConverter().toJson(
     instance.isOriginalSound,
   ),

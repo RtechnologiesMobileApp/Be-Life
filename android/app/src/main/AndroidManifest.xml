@@ -9,6 +9,7 @@
     android:hardwareAccelerated="true"
     android:usesCleartextTraffic="true"
     android:label="Be Life"
+  
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

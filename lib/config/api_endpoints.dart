@@ -28,4 +28,8 @@ class ApiEndpoints {
   static final String unfollowUser = "$baseUrl/users/unfollow";
   static final String getFollowers = "$baseUrl/users/followers";
   static final String getFollowing = "$baseUrl/users/following";
+
+  // new endpoints for otp
+  static final String sendOtp = "$baseUrl/otp/sendOtp";
+  static final String verifyOtp = "$baseUrl/otp/verifyOtp";
 }
